@@ -55,7 +55,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 This middleware can be configured using following configuration options:
 
  * `DefaultBlockLevel` defines default action when IP address is not listed. Can be configured to `None` or `All`. Default value is `All`.
- * `HttpStatusCode` defines status code that is returned to client when IP address is forbidden.
+ * `HttpStatusCode` defines status code that is returned to client when IP address is forbidden. Default value is `404` (`Not Found`).
  * `Whitelist` defines list of IP address ranges that are allowed for request.
  * `Blacklist` defines list of IP address ranges that are forbidden for request.
 
