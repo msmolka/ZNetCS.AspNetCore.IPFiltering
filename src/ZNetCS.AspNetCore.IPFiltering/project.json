@@ -38,8 +38,7 @@
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Options": "1.1.0",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.Net.Http.Headers": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",    
     "StyleCop.Analyzers": {
       "version": "1.0.0",
       "type": "build"
@@ -48,15 +47,7 @@
   },
 
   "frameworks": {
-    "net451": {
-      "dependencies": {
-        "System.Diagnostics.Tools": "4.0.0"
-      }
-    },
-    "netstandard1.6": {
-      "dependencies": {
-        "System.Diagnostics.Tools": "4.3.0"
-      }
-    }
+    "net451": {},
+    "netstandard1.6": {}
   }
 }
