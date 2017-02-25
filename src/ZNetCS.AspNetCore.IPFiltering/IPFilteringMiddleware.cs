@@ -116,7 +116,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
             }
             else
             {
-                this.logger.LogInformation(1, "The {BlokedIp} was blocked.", ipAddress);
+                this.logger.LogInformation(1, "The IP Address: {BlokedIp} was blocked.", ipAddress);
                 context.Response.StatusCode = (int)this.options.HttpStatusCode;
             }
         }
