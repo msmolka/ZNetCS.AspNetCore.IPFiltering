@@ -54,19 +54,18 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
  ##Configuration
 This middleware can be configured using following configuration options:
 
-`DefaultBlockLevel` defines default action when IP address is not listed. Can be configured to `None` or `All`. Default value is `All`.
-`HttpStatusCode` defines status code that is returned to client when IP address is forbidden.
-`Whitelist` defines list of IP address ranges that are allowed for request.
-`Blacklist` defines list of IP address ranges that are forbidden for request.
+*`DefaultBlockLevel` defines default action when IP address is not listed. Can be configured to `None` or `All`. Default value is `All`.
+*`HttpStatusCode` defines status code that is returned to client when IP address is forbidden.
+*`Whitelist` defines list of IP address ranges that are allowed for request.
+*`Blacklist` defines list of IP address ranges that are forbidden for request.
 
  ###IP Address Ranges
  `Whitelist` and `Blacklist` can be defined as single IP address or IP address range. For parsing middleware is using extenal 
- package: https://github.com/jsakamoto/ipaddressrange
- Ranges can be defined in following formats:
+ package: https://github.com/jsakamoto/ipaddressrange. Ranges can be defined in following formats:
 
- `192.168.0.0/255.255.255.0`
- `192.168.0.10-192.168.10.20`
- `fe80::/10`
+ *`192.168.0.0/255.255.255.0`
+ *`192.168.0.10-192.168.10.20`
+ *`fe80::/10`
 
  ##File
  Middleware can be configured in appsettings.json file. By adding following section and use following `ConfigureServices` method:
