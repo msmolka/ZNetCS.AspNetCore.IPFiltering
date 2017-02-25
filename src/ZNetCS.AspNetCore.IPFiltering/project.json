@@ -2,11 +2,11 @@
   "version": "1.0.0",
   "packOptions": {
     "owners": [ "Marcin Smółka" ],
-    "licenseUrl": "https://raw.githubusercontent.com/msmolka/ZNetCS.AspNetCore.IpFiltering/master/LICENSE",
-    "projectUrl": "https://github.com/msmolka/ZNetCS.AspNetCore.IpFiltering",
+    "licenseUrl": "https://raw.githubusercontent.com/msmolka/ZNetCS.AspNetCore.IPFiltering/master/LICENSE",
+    "projectUrl": "https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering",
     "repository": {
       "type": "git",
-      "url": "https://github.com/msmolka/ZNetCS.AspNetCore.IpFiltering"
+      "url": "https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering"
     },
     "tags": [
       "aspnetcore",
