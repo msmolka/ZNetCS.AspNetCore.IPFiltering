@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ZNetCS.AspNetCore.IpFilteringTest")]
+[assembly: AssemblyProduct("ZNetCS.AspNetCore.IPFilteringTest")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("2e64647d-f73d-4cf6-bba4-0fd02f49ce76")]

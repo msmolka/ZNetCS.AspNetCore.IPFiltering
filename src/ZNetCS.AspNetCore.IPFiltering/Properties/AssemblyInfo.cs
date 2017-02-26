@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marcin Smółka zNET Computer Solutions")]
-[assembly: AssemblyTitle("ZNetCS.AspNetCore.IpFiltering")]
-[assembly: AssemblyProduct("ZNetCS.AspNetCore.IpFiltering")]
+[assembly: AssemblyTitle("ZNetCS.AspNetCore.IPFiltering")]
+[assembly: AssemblyProduct("ZNetCS.AspNetCore.IPFiltering")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCopyright("Copyright © Marcin Smółka zNET Computer Solutions 2017")]
 [assembly: ComVisible(false)]
