@@ -27,8 +27,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         #region Public Methods
 
         /// <summary>
-        /// Adds the <see cref="IPFilteringMiddleware"/> to automatically set compressors and decompressors for
-        /// requests and responses based on information provided by the client.
+        /// Adds the <see cref="IPFilteringMiddleware"/> to automatically set filtering block options.
         /// </summary>
         /// <param name="app">
         /// The <see cref="IApplicationBuilder"/> to use compression on.
@@ -48,8 +47,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         }
 
         /// <summary>
-        /// Adds the <see cref="IPFilteringMiddleware"/> to automatically  set compressors and decompressors for
-        /// requests and responses based on information provided by the client.
+        /// Adds the <see cref="IPFilteringMiddleware"/> to manully set filtering block options.
         /// </summary>
         /// <param name="app">
         /// The <see cref="IApplicationBuilder"/> to use compression on.
