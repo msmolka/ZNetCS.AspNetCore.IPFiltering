@@ -30,16 +30,19 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
         /// <inheritdoc />
         public virtual bool IsAllowed(IPAddress ipAddress, IPFilteringOptions options)
         {
-            var whitelist = options.Whitelist.Select(IPAddressRange.Parse).ToList();
-            var blacklist = options.Blacklist.Select(IPAddressRange.Parse).ToList();
-
-            switch (options.DefaultBlockLevel)
+            if (ipAddress != null)
             {
-                case DefaultBlockLevel.All:
-                    return whitelist.Any(r => r.Contains(ipAddress)) && !blacklist.Any(r => r.Contains(ipAddress));
+                var whitelist = options.Whitelist.Select(IPAddressRange.Parse).ToList();
+                var blacklist = options.Blacklist.Select(IPAddressRange.Parse).ToList();
 
-                case DefaultBlockLevel.None:
-                    return !blacklist.Any(r => r.Contains(ipAddress)) || whitelist.Any(r => r.Contains(ipAddress));
+                switch (options.DefaultBlockLevel)
+                {
+                    case DefaultBlockLevel.All:
+                        return whitelist.Any(r => r.Contains(ipAddress)) && !blacklist.Any(r => r.Contains(ipAddress));
+
+                    case DefaultBlockLevel.None:
+                        return !blacklist.Any(r => r.Contains(ipAddress)) || whitelist.Any(r => r.Contains(ipAddress));
+                }
             }
 
             return options.DefaultBlockLevel == DefaultBlockLevel.None;

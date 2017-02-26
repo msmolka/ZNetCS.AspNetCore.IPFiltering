@@ -56,6 +56,25 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         }
 
         /// <summary>
+        /// The code allow no IP test.
+        /// </summary>
+        [TestMethod]
+        public async Task CodeAllowNoIPTest()
+        {
+            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { DefaultBlockLevel = DefaultBlockLevel.None })))
+            {
+                // Act
+                RequestBuilder request = server.CreateRequest("/");
+
+                HttpResponseMessage response = await request.SendAsync("PUT");
+
+                // Arrange
+                response.EnsureSuccessStatusCode();
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+            }
+        }
+
+        /// <summary>
         /// The allow all test.
         /// </summary>
         [TestMethod]
@@ -332,6 +351,24 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 // Arrange
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
+            }
+        }
+
+        /// <summary>
+        /// The code block no IP test.
+        /// </summary>
+        [TestMethod]
+        public async Task CodeBlockNoIPTest()
+        {
+            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder()))
+            {
+                // Act
+                RequestBuilder request = server.CreateRequest("/");
+
+                HttpResponseMessage response = await request.SendAsync("PUT");
+
+                // Arrange
+                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != NotFound");
             }
         }
 
