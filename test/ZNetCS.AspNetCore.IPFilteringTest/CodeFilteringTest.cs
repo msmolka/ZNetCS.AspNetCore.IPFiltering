@@ -49,7 +49,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -68,7 +68,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -85,7 +85,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
                 // Act
                 HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -113,7 +113,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -141,7 +141,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -169,7 +169,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -197,7 +197,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -221,7 +221,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -245,7 +245,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -269,7 +269,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -293,7 +293,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -310,7 +310,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
                 // Act
                 HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode, "StatusCode != Forbidden");
             }
         }
@@ -326,7 +326,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
                 // Act
                 HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -349,7 +349,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -367,7 +367,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != NotFound");
             }
         }
@@ -390,7 +390,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -413,7 +413,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -436,7 +436,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -459,7 +459,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -486,7 +486,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -513,7 +513,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -540,7 +540,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -567,7 +567,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }
@@ -594,7 +594,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
             }
         }

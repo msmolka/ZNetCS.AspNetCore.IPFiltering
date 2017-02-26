@@ -42,7 +42,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -62,7 +62,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -82,7 +82,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -102,7 +102,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 response.EnsureSuccessStatusCode();
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
@@ -140,7 +140,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange                
+                // Assert                
                 Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
             }
         }
@@ -159,7 +159,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Arrange
+                // Assert
                 Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Not Found");
             }
         }
