@@ -30,7 +30,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// Adds the <see cref="IPFilteringMiddleware"/> to automatically set filtering block options.
         /// </summary>
         /// <param name="app">
-        /// The <see cref="IApplicationBuilder"/> to use compression on.
+        /// The <see cref="IApplicationBuilder"/> to use filtering on.
         /// </param>
         /// <returns>
         /// The <see cref="IApplicationBuilder"/> so that assitional calls can be chained.
@@ -50,7 +50,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// Adds the <see cref="IPFilteringMiddleware"/> to manully set filtering block options.
         /// </summary>
         /// <param name="app">
-        /// The <see cref="IApplicationBuilder"/> to use compression on.
+        /// The <see cref="IApplicationBuilder"/> to use filtering on.
         /// </param>
         /// <param name="options">
         /// The <see cref="IPFilteringOptions"/> to configure the middleware with.
