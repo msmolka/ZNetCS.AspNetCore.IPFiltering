@@ -1,21 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3B0F6503-0CCF-476E-B9D0-FDF9C15A83F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{675DC679-FAC4-45E0-AB61-D06EE6FA19AC}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZNetCS.AspNetCore.IPFiltering", "src\ZNetCS.AspNetCore.IpFiltering\ZNetCS.AspNetCore.IPFiltering.xproj", "{DA38722D-9FFC-4ABD-A635-100FFCE32B35}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZNetCS.AspNetCore.IPFilteringTest", "test\ZNetCS.AspNetCore.IpFilteringTest\ZNetCS.AspNetCore.IPFilteringTest.xproj", "{2E64647D-F73D-4CF6-BBA4-0FD02F49CE76}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D5224C81-DC79-4346-845F-176A0B988E9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZNetCS.AspNetCore.IPFiltering", "src\ZNetCS.AspNetCore.IPFiltering\ZNetCS.AspNetCore.IPFiltering.csproj", "{DA38722D-9FFC-4ABD-A635-100FFCE32B35}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZNetCS.AspNetCore.IPFilteringTest", "test\ZNetCS.AspNetCore.IPFilteringTest\ZNetCS.AspNetCore.IPFilteringTest.csproj", "{2E64647D-F73D-4CF6-BBA4-0FD02F49CE76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

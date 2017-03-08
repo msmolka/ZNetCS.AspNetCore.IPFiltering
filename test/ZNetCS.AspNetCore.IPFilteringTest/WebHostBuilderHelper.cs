@@ -12,6 +12,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
     #region Usings
 
     using System.IO;
+    using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -60,9 +61,12 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         /// </summary>
         public static IWebHostBuilder CreateBlockFileBuilder()
         {
+            var path = Path.GetDirectoryName(typeof(StartupBlock).GetTypeInfo().Assembly.Location);
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+
             return new WebHostBuilder()
                 .UseStartup<StartupBlock>()
-                .UseContentRoot(Directory.GetCurrentDirectory());
+                .UseContentRoot(di.FullName);
         }
 
         /// <summary>
@@ -70,9 +74,12 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         /// </summary>
         public static IWebHostBuilder CreateAllowFileBuilder()
         {
+            var path = Path.GetDirectoryName(typeof(StartupAllow).GetTypeInfo().Assembly.Location);
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+
             return new WebHostBuilder()
                 .UseStartup<StartupAllow>()
-                .UseContentRoot(Directory.GetCurrentDirectory());
+                .UseContentRoot(di.FullName);
         }
 
         #endregion
