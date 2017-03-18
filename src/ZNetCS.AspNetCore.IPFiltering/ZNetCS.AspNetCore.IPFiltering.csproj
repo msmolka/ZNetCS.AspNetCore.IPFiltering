@@ -45,7 +45,7 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="IPAddressRange" Version="1.6.2.1-beta" />
+    <PackageReference Include="IPAddressRange" Version="1.6.2.7" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
