@@ -13,7 +13,7 @@ Install using the [ZNetCS.AspNetCore.IPFiltering NuGet package](https://www.nuge
 PM> Install-Package ZNetCS.AspNetCore.IPFiltering
 ```
 
-##Usage 
+## Usage 
 
 When you install the package, it should be added to your `package.json`. Alternatively, you can add it directly by adding:
 
@@ -51,7 +51,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 }
 ```
 
-##Configuration
+## Configuration
 This middleware can be configured using following configuration options:
 
  * `DefaultBlockLevel` defines default action when IP address is not listed. Can be configured to `None` or `All`. Default value is `All`.
@@ -59,7 +59,7 @@ This middleware can be configured using following configuration options:
  * `Whitelist` defines list of IP address ranges that are allowed for request.
  * `Blacklist` defines list of IP address ranges that are forbidden for request.
 
-###IP Address Ranges
+### IP Address Ranges
 `Whitelist` and `Blacklist` can be defined as single IP address or IP address range. For parsing middleware is using extenal 
 package: https://github.com/jsakamoto/ipaddressrange. Ranges can be defined in following formats:
 
@@ -67,7 +67,7 @@ package: https://github.com/jsakamoto/ipaddressrange. Ranges can be defined in f
  * `192.168.0.10-192.168.10.20`
  * `fe80::/10`
 
-##File
+## File
 Middleware can be configured in appsettings.json file. By adding following section and use following `ConfigureServices` method:
 
 ```json
