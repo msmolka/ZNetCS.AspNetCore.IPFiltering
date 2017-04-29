@@ -66,7 +66,7 @@ package: https://github.com/jsakamoto/ipaddressrange. Ranges can be defined in f
  * `fe80::/10`
 
 ## File
-Middleware can be configured in appsettings.json file. By adding following section and use following `ConfigureServices` method:
+Middleware can be configured in `appsettings.json` file. By adding following section and use following `ConfigureServices` method:
 
 ```json
 {
