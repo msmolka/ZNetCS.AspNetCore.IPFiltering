@@ -15,15 +15,13 @@ PM> Install-Package ZNetCS.AspNetCore.IPFiltering
 
 ## Usage 
 
-When you install the package, it should be added to your `package.json`. Alternatively, you can add it directly by adding:
+When you install the package, it should be added to your `.csproj`. Alternatively, you can add it directly by adding:
 
 
-```json
-{
-  "dependencies" : {
-    "ZNetCS.AspNetCore.IPFiltering": "1.0.1"
-  }
-}
+```xml
+<ItemGroup>
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="1.0.1" />    
+</ItemGroup>
 ```
 
 In order to use the IP filtering middleware, you must configure the services in the `ConfigureServices` and `Configure` call of `Startup`. Make
@@ -45,9 +43,9 @@ public void ConfigureServices(IServiceCollection services)
 
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 {   
-	app.UseIPFiltering();
+    app.UseIPFiltering();
 
-	// other middleware e.g. MVC etc
+    // other middleware e.g. MVC etc
 }
 ```
 
@@ -80,6 +78,7 @@ Middleware can be configured in appsettings.json file. By adding following secti
     }
 }
 ```
+
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
