@@ -140,7 +140,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 HttpResponseMessage response = await request.SendAsync("PUT");
 
-                // Assert                
+                // Assert
                 Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
             }
         }
