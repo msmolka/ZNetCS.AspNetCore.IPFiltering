@@ -38,14 +38,44 @@ using ZNetCS.AspNetCore.IPFiltering.DependencyInjection;
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddIPFiltering();
+    services.AddIPFiltering(this.Configuration.GetSection("IPFiltering"));
 }
+```
+or
 
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddIPFiltering(
+        opts =>
+        {
+            opts.DefaultBlockLevel = DefaultBlockLevel.All;
+            opts.HttpStatusCode = HttpStatusCode.NotFound;
+            opts.Blacklist = new List<string> { "192.168.0.100-192.168.1.200" };
+            opts.Whitelist = new List<string> { "192.168.0.10-192.168.10.20", "fe80::/10" };
+        });
+}
+```
+```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 {   
     app.UseIPFiltering();
 
     // other middleware e.g. MVC etc
+}
+```
+
+## File
+Middleware can be configured in `appsettings.json` file. By adding following section and use following `ConfigureServices` method:
+
+```json
+{
+    "IPFiltering": {
+        "DefaultBlockLevel": "All",
+        "HttpStatusCode": 404,
+        "Whitelist": [ "192.168.0.10-192.168.10.20", "fe80::/10" ],
+        "Blacklist": [ "192.168.0.100-192.168.1.200"]
+    }
 }
 ```
 
@@ -65,37 +95,3 @@ package: https://github.com/jsakamoto/ipaddressrange. Ranges can be defined in f
  * `192.168.0.10-192.168.10.20`
  * `fe80::/10`
 
-## File
-Middleware can be configured in `appsettings.json` file. By adding following section and use following `ConfigureServices` method:
-
-```json
-{
-    "IPFiltering": {
-        "DefaultBlockLevel": "All",
-        "HttpStatusCode": 404,
-        "Whitelist": [ "192.168.0.10-192.168.10.20", "fe80::/10" ],
-        "Blacklist": [ "192.168.0.100-192.168.1.200"]
-    }
-}
-```
-
-```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddIPFiltering(this.Configuration.GetSection("IPFiltering"));
-}
-```
-
-```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddIPFiltering(
-        opts =>
-        {
-            opts.DefaultBlockLevel = DefaultBlockLevel.All;
-            opts.HttpStatusCode = HttpStatusCode.NotFound;
-            opts.Blacklist = new List<string> { "192.168.0.100-192.168.1.200" };
-            opts.Whitelist = new List<string> { "192.168.0.10-192.168.10.20", "fe80::/10" };
-        });
-}
-```
