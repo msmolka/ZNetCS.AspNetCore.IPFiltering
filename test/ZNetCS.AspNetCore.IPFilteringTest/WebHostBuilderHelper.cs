@@ -31,29 +31,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         #region Public Methods
 
         /// <summary>
-        /// Creates code builder.
+        /// Creates file builder.
         /// </summary>
-        /// <param name="options">
-        /// The options.
-        /// </param>
-        public static IWebHostBuilder CreateCodeBuilder(IPFilteringOptions options = null)
+        public static IWebHostBuilder CreateAllowFileBuilder()
         {
-            if (options == null)
-            {
-                options = new IPFilteringOptions();
-            }
+            var path = Path.GetDirectoryName(typeof(StartupAllow).GetTypeInfo().Assembly.Location);
 
-            IWebHostBuilder builder = new WebHostBuilder()
-                .ConfigureServices(s => s.AddIPFiltering())
-                .Configure(
-                    app =>
-                    {
-                        app.UseIPFiltering(options);
-                        app.Run(
-                            async c => { await c.Response.WriteAsync("Hello World"); });
-                    });
+            // ReSharper disable PossibleNullReferenceException
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
 
-            return builder;
+            return new WebHostBuilder()
+                .UseStartup<StartupAllow>()
+                .UseContentRoot(di.FullName);
+
+            // ReSharper restore PossibleNullReferenceException
         }
 
         /// <summary>
@@ -62,24 +53,47 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         public static IWebHostBuilder CreateBlockFileBuilder()
         {
             var path = Path.GetDirectoryName(typeof(StartupBlock).GetTypeInfo().Assembly.Location);
+
+            // ReSharper disable PossibleNullReferenceException
             var di = new DirectoryInfo(path).Parent.Parent.Parent;
 
             return new WebHostBuilder()
                 .UseStartup<StartupBlock>()
                 .UseContentRoot(di.FullName);
+
+            // ReSharper restore PossibleNullReferenceException
         }
 
         /// <summary>
-        /// Creates file builder.
+        /// Creates code builder.
         /// </summary>
-        public static IWebHostBuilder CreateAllowFileBuilder()
+        /// <param name="options">
+        /// The options.
+        /// </param>
+        public static IWebHostBuilder CreateCodeBuilder(IPFilteringOptions options = null)
         {
-            var path = Path.GetDirectoryName(typeof(StartupAllow).GetTypeInfo().Assembly.Location);
-            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+            IWebHostBuilder builder = new WebHostBuilder()
+                .ConfigureServices(
+                    s => s.AddIPFiltering(
+                        opts =>
+                        {
+                            if (options != null)
+                            {
+                                opts.DefaultBlockLevel = options.DefaultBlockLevel;
+                                opts.HttpStatusCode = options.HttpStatusCode;
+                                opts.Blacklist = options.Blacklist;
+                                opts.Whitelist = options.Whitelist;
+                            }
+                        }))
+                .Configure(
+                    app =>
+                    {
+                        app.UseIPFiltering();
+                        app.Run(
+                            async c => { await c.Response.WriteAsync("Hello World"); });
+                    });
 
-            return new WebHostBuilder()
-                .UseStartup<StartupAllow>()
-                .UseContentRoot(di.FullName);
+            return builder;
         }
 
         #endregion

@@ -20,7 +20,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="2.0.0" />
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="2.1.0" />
 </ItemGroup>
 ```
 
@@ -83,5 +83,19 @@ Middleware can be configured in `appsettings.json` file. By adding following sec
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddIPFiltering(this.Configuration.GetSection("IPFiltering"));
+}
+```
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddIPFiltering(
+        opts =>
+        {
+            opts.DefaultBlockLevel = DefaultBlockLevel.All;
+            opts.HttpStatusCode = HttpStatusCode.NotFound;
+            opts.Blacklist = new List<string> { "192.168.0.100-192.168.1.200" };
+            opts.Whitelist = new List<string> { "192.168.0.10-192.168.10.20", "fe80::/10" };
+        });
 }
 ```

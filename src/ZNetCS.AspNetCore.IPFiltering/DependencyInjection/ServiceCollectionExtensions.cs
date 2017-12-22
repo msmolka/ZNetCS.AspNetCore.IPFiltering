@@ -86,6 +86,36 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
             return services;
         }
 
+        /// <summary>
+        /// Adds IP filtering services to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add services to.
+        /// </param>
+        /// <param name="configure">
+        /// The <see cref="IPFilteringMiddleware"/> configuration delegate.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IServiceCollection"/> so that additional calls can be chained.
+        /// </returns>
+        public static IServiceCollection AddIPFiltering(this IServiceCollection services, Action<IPFilteringOptions> configure)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            if (configure == null)
+            {
+                throw new ArgumentNullException(nameof(configure));
+            }
+
+            services.AddIPFiltering();
+            services.Configure(configure);
+
+            return services;
+        }
+
         #endregion
     }
 }

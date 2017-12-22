@@ -59,6 +59,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// The <see cref="IApplicationBuilder"/> so that assitional calls can be chained.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "OK")]
+        [Obsolete("Use " + nameof(ServiceCollectionExtensions.AddIPFiltering) + " with configure options instead")]
         public static IApplicationBuilder UseIPFiltering(
             this IApplicationBuilder app,
             IPFilteringOptions options)
