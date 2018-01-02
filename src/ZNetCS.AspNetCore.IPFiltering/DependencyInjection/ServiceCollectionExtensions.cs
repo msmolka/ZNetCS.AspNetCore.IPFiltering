@@ -37,6 +37,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// <returns>
         /// The <see cref="IServiceCollection"/> so that additional calls can be chained.
         /// </returns>
+        [Obsolete("Use " + nameof(AddIPFiltering) + " with configure options or configuration section instead")]
         public static IServiceCollection AddIPFiltering(this IServiceCollection services)
         {
             if (services == null)
@@ -110,8 +111,12 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
                 throw new ArgumentNullException(nameof(configure));
             }
 
-            services.AddIPFiltering();
+            services.AddOptions();
+
             services.Configure(configure);
+
+            services.TryAddSingleton<IIPAddressFinder, IPAddressFinder>();
+            services.TryAddSingleton<IIPAddressChecker, IPAddressChecker>();
 
             return services;
         }
