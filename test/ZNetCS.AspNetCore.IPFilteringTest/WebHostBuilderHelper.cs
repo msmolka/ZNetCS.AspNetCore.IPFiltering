@@ -96,6 +96,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
             return builder;
         }
 
+        /// <summary>
+        /// Creates file builder.
+        /// </summary>
+        public static IWebHostBuilder CreateIgnoreFileBuilder()
+        {
+            var path = Path.GetDirectoryName(typeof(StartupBlock).GetTypeInfo().Assembly.Location);
+
+            // ReSharper disable PossibleNullReferenceException
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+
+            return new WebHostBuilder()
+                .UseStartup<StartupIgnore>()
+                .UseContentRoot(di.FullName);
+
+            // ReSharper restore PossibleNullReferenceException
+        }
+
         #endregion
     }
 }

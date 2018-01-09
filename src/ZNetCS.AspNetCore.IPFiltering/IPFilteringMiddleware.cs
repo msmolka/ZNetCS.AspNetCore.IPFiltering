@@ -79,6 +79,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
                     this.options.HttpStatusCode = opts.HttpStatusCode;
                     this.options.Blacklist = opts.Blacklist;
                     this.options.Whitelist = opts.Whitelist;
+                    this.options.IgnoredPaths = opts.IgnoredPaths;
                 });
         }
 
@@ -102,17 +103,20 @@ namespace ZNetCS.AspNetCore.IPFiltering
             var finder = context.RequestServices.GetRequiredService<IIPAddressFinder>();
             var checker = context.RequestServices.GetRequiredService<IIPAddressChecker>();
 
+            var path = context.Request.Path.HasValue ? context.Request.Path.Value : null;
+            var verb = context.Request.Method;
+
             IPAddress ipAddress = finder.Find(context);
 
-            this.logger.LogDebug("Checking if IP: {ipAddress} address is allowed.", ipAddress);
-            if (checker.IsAllowed(ipAddress, this.options))
+            this.logger.LogDebug("Checking if path: {path} with method {verb} should be ignored or IP: {ipAddress} address is allowed .", path, verb, ipAddress);
+            if (checker.IsIgnored(verb, path, this.options) || checker.IsAllowed(ipAddress, this.options))
             {
                 this.logger.LogDebug("IP is allowed for further process.");
                 await this.next.Invoke(context);
             }
             else
             {
-                this.logger.LogInformation(1, "The IP Address: {BlokedIp} was blocked.", ipAddress);
+                this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
                 context.Response.StatusCode = (int)this.options.HttpStatusCode;
             }
         }

@@ -36,6 +36,23 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// </returns>
         bool IsAllowed(IPAddress ipAddress, IPFilteringOptions options);
 
+        /// <summary>
+        /// Check if path should be ignored.
+        /// </summary>
+        /// <param name="verb">
+        /// The HTTP verb.
+        /// </param>
+        /// <param name="path">
+        /// The request path.
+        /// </param>
+        /// <param name="options">
+        /// The IP filtering options.
+        /// </param>
+        /// <returns>
+        /// Returns <see langword="true"/> if request path should be ignored, otherwise <see langword="false"/>.
+        /// </returns>
+        bool IsIgnored(string verb, string path, IPFilteringOptions options);
+
         #endregion
     }
 }

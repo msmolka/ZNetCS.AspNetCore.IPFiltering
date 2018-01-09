@@ -26,7 +26,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <summary>
         /// Gets or sets the blacklist.
         /// </summary>
-        public IList<string> Blacklist { get; set; } = new List<string>();
+        public ICollection<string> Blacklist { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the default block level.
@@ -41,7 +41,12 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <summary>
         /// Gets or sets the whitelist.
         /// </summary>
-        public IList<string> Whitelist { get; set; } = new List<string>();
+        public ICollection<string> Whitelist { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the paths to be ignored for compression.
+        /// </summary>
+        public ICollection<string> IgnoredPaths { get; set; } = new List<string>();
 
         #endregion
     }

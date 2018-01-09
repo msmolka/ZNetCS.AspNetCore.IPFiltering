@@ -29,7 +29,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         #region Public Methods
 
         /// <summary>
-        /// The block none test.
+        /// The allow all not found test.
         /// </summary>
         [TestMethod]
         public async Task FileAllowAllNotFoundTest()
@@ -161,6 +161,64 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 
                 // Assert
                 Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Not Found");
+            }
+        }
+
+        /// <summary>
+        /// The ignore all methods test.
+        /// </summary>
+        [TestMethod]
+        public async Task FileIgnoreAllTest()
+        {
+            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
+            {
+                // Act
+                RequestBuilder request = server.CreateRequest("/ignorepost");
+                request.AddHeader("X-Real-IP", "192.168.0.1");
+
+                HttpResponseMessage response = await request.SendAsync("PUT");
+
+                // Assert
+                response.EnsureSuccessStatusCode();
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+            }
+        }
+
+        /// <summary>
+        /// The not ignore block all test.
+        /// </summary>
+        [TestMethod]
+        public async Task FileIgnoreBlockPutTest()
+        {
+            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
+            {
+                // Act
+                RequestBuilder request = server.CreateRequest("/ignoreget");
+                request.AddHeader("X-Real-IP", "192.168.0.1");
+
+                HttpResponseMessage response = await request.SendAsync("PUT");
+
+                Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
+            }
+        }
+
+        /// <summary>
+        /// The ignore get test.
+        /// </summary>
+        [TestMethod]
+        public async Task FileIgnoreGetTest()
+        {
+            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
+            {
+                // Act
+                RequestBuilder request = server.CreateRequest("/ignoreget");
+                request.AddHeader("X-Real-IP", "192.168.0.1");
+
+                HttpResponseMessage response = await request.SendAsync("GET");
+
+                // Assert
+                response.EnsureSuccessStatusCode();
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
             }
         }
 

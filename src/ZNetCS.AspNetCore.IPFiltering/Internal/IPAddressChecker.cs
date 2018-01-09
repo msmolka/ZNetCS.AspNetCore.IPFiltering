@@ -11,6 +11,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
 {
     #region Usings
 
+    using System;
     using System.Linq;
     using System.Net;
 
@@ -27,7 +28,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
 
         #region IIPAddressChecker
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool IsAllowed(IPAddress ipAddress, IPFilteringOptions options)
         {
             if (ipAddress != null)
@@ -46,6 +47,28 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
             }
 
             return options.DefaultBlockLevel == DefaultBlockLevel.None;
+        }
+
+        /// <inheritdoc/>
+        public bool IsIgnored(string verb, string path, IPFilteringOptions options)
+        {
+            if (options.IgnoredPaths != null)
+            {
+                string fullCheck = $"{verb}:{path}";
+                string check = $"*:{path}";
+
+                if (options.IgnoredPaths.Any(x => Contains(fullCheck, x)) || options.IgnoredPaths.Any(x => Contains(check, x)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+            bool Contains(string source, string value)
+            {
+                return (source != null) && (value != null) && source.StartsWith(value, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         #endregion
