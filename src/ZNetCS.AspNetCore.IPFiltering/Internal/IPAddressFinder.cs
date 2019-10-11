@@ -11,6 +11,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
 {
     #region Usings
 
+    using System;
     using System.Net;
 
     using Microsoft.AspNetCore.Http;
@@ -54,10 +55,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
         /// <param name="loggerFactory">
         /// The logger factory.
         /// </param>
-        public IPAddressFinder(ILoggerFactory loggerFactory)
-        {
-            this.logger = loggerFactory.CreateLogger<IPAddressFinder>();
-        }
+        public IPAddressFinder(ILoggerFactory loggerFactory) => this.logger = loggerFactory.CreateLogger<IPAddressFinder>();
 
         #endregion
 
@@ -65,9 +63,14 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
 
         #region IIPAddressFinder
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual IPAddress Find(HttpContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             string realIpHeader = context.Request.Headers[RealIP];
             IPAddress ipAddress = null;
             if (!string.IsNullOrWhiteSpace(realIpHeader))

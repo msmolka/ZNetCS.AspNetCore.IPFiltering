@@ -26,6 +26,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <summary>
         /// Gets or sets the blacklist.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
         public ICollection<string> Blacklist { get; set; } = new List<string>();
 
         /// <summary>
@@ -41,11 +42,13 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <summary>
         /// Gets or sets the whitelist.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
         public ICollection<string> Whitelist { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the paths to be ignored for compression.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
         public ICollection<string> IgnoredPaths { get; set; } = new List<string>();
 
         #endregion

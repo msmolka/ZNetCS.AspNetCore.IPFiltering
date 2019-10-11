@@ -7,15 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
+// ReSharper disable once CheckNamespace
+namespace Microsoft.AspNetCore.Builder
 {
     #region Usings
 
     using System;
     using System.Diagnostics.CodeAnalysis;
 
-    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
+
+    using ZNetCS.AspNetCore.IPFiltering;
 
     #endregion
 
@@ -33,7 +36,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// The <see cref="IApplicationBuilder"/> to use filtering on.
         /// </param>
         /// <returns>
-        /// The <see cref="IApplicationBuilder"/> so that assitional calls can be chained.
+        /// The <see cref="IApplicationBuilder"/> so that additional calls can be chained.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "OK")]
         public static IApplicationBuilder UseIPFiltering(this IApplicationBuilder app)
@@ -47,7 +50,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         }
 
         /// <summary>
-        /// Adds the <see cref="IPFilteringMiddleware"/> to manully set filtering block options.
+        /// Adds the <see cref="IPFilteringMiddleware"/> to manually set filtering block options.
         /// </summary>
         /// <param name="app">
         /// The <see cref="IApplicationBuilder"/> to use filtering on.
@@ -56,7 +59,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.DependencyInjection
         /// The <see cref="IPFilteringOptions"/> to configure the middleware with.
         /// </param>
         /// <returns>
-        /// The <see cref="IApplicationBuilder"/> so that assitional calls can be chained.
+        /// The <see cref="IApplicationBuilder"/> so that additional calls can be chained.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "OK")]
         [Obsolete("Use " + nameof(ServiceCollectionExtensions.AddIPFiltering) + " with configure options instead")]

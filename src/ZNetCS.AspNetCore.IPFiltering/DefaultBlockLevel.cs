@@ -12,15 +12,15 @@ namespace ZNetCS.AspNetCore.IPFiltering
     /// <summary>
     /// The default block level.
     /// </summary>
-    public enum DefaultBlockLevel : byte
+    public enum DefaultBlockLevel
     {
         /// <summary>
-        /// The none.
+        /// None of request will be blocked if not blacklisted.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// The all.
+        /// All requests will be blocked if not whitelisted.
         /// </summary>
         All = 1
     }

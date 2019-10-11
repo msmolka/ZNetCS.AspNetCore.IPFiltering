@@ -11,16 +11,11 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
 {
     #region Usings
 
-    using System;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
-    using ZNetCS.AspNetCore.IPFiltering.DependencyInjection;
 
     #endregion
 
@@ -37,7 +32,11 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         /// <param name="env">
         /// The hosting environment.
         /// </param>
+#if NETCOREAPP3_0
+        public StartupIgnore(IWebHostEnvironment env)
+#else
         public StartupIgnore(IHostingEnvironment env)
+#endif
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -65,16 +64,7 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         /// <param name="app">
         /// The application builder.
         /// </param>
-        /// <param name="env">
-        /// The hosting environment.
-        /// </param>
-        /// <param name="loggerFactory">
-        /// The logger factory.
-        /// </param>
-        /// <param name="serviceProvider">
-        /// The service provider.
-        /// </param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseIPFiltering();
             app.Run(async context => { await context.Response.WriteAsync("Hello World"); });

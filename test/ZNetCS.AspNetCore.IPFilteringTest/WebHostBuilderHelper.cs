@@ -17,9 +17,9 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.DependencyInjection;
 
     using ZNetCS.AspNetCore.IPFiltering;
-    using ZNetCS.AspNetCore.IPFiltering.DependencyInjection;
 
     #endregion
 

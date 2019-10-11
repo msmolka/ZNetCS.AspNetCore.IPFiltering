@@ -67,6 +67,11 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// </param>
         public IPFilteringMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IOptionsMonitor<IPFilteringOptions> options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             this.next = next;
             this.logger = loggerFactory.CreateLogger<IPFilteringMiddleware>();
 

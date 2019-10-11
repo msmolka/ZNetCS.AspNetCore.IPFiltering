@@ -31,6 +31,11 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
         /// <inheritdoc/>
         public virtual bool IsAllowed(IPAddress ipAddress, IPFilteringOptions options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             if (ipAddress != null)
             {
                 var whitelist = options.Whitelist.Select(IPAddressRange.Parse).ToList();
@@ -52,6 +57,11 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
         /// <inheritdoc/>
         public bool IsIgnored(string verb, string path, IPFilteringOptions options)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             if (options.IgnoredPaths != null)
             {
                 string fullCheck = $"{verb}:{path}";
