@@ -113,6 +113,40 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
             // ReSharper restore PossibleNullReferenceException
         }
 
+        /// <summary>
+        /// Creates file builder.
+        /// </summary>
+        public static IWebHostBuilder CreatePathAllowFileBuilder()
+        {
+            var path = Path.GetDirectoryName(typeof(StartupAllow).GetTypeInfo().Assembly.Location);
+
+            // ReSharper disable PossibleNullReferenceException
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+
+            return new WebHostBuilder()
+                .UseStartup<StartupPathAllow>()
+                .UseContentRoot(di.FullName);
+
+            // ReSharper restore PossibleNullReferenceException
+        }
+
+        /// <summary>
+        /// Creates file builder.
+        /// </summary>
+        public static IWebHostBuilder CreatePathBlockFileBuilder()
+        {
+            var path = Path.GetDirectoryName(typeof(StartupAllow).GetTypeInfo().Assembly.Location);
+
+            // ReSharper disable PossibleNullReferenceException
+            var di = new DirectoryInfo(path).Parent.Parent.Parent;
+
+            return new WebHostBuilder()
+                .UseStartup<StartupPathBlock>()
+                .UseContentRoot(di.FullName);
+
+            // ReSharper restore PossibleNullReferenceException
+        }
+
         #endregion
     }
 }

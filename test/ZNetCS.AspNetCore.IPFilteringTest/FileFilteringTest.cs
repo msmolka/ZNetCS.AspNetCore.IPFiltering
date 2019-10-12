@@ -34,18 +34,36 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileAllowAllNotFoundTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The allow all not found test.
+        /// </summary>
+        [TestMethod]
+        public async Task FileAllowAllNotFoundTest2()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathBlockFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
+
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -54,58 +72,54 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileAllowRealIPNotOnBlacklistTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The file allow on blacklist test.
+        /// </summary>
+        [TestMethod]
+        public async Task FileAllowRealIPOnBlacklistTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.10");
+
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
         }
 
         /// <summary>
         /// The file allow on blacklist but whitelisted test.
         /// </summary>
         [TestMethod]
-        public async Task FileAllowRealIPOnBlacklistBTest()
+        public async Task FileAllowRealIPOnBlacklistTest2()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.101");
+            using var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.101");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
-        }
+            HttpResponseMessage response = await request.SendAsync("PUT");
 
-        /// <summary>
-        /// The file allow on whitelist blacklist test.
-        /// </summary>
-        [TestMethod]
-        public async Task FileAllowRealIPOnWhitelistBlacklistTest()
-        {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateBlockFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.10");
-
-                HttpResponseMessage response = await request.SendAsync("PUT");
-
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -114,35 +128,32 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileBlockAllNotFoundTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateBlockFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateBlockFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
         }
 
         /// <summary>
-        /// The file block on blacklist test.
+        /// The block all test.
         /// </summary>
         [TestMethod]
-        public async Task FileBlockRealIPOnBlacklistTest()
+        public async Task FileBlockAllNotFoundTest2()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateAllowFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.10");
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathAllowFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
         }
 
         /// <summary>
@@ -151,17 +162,16 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileBlockRealIPOnWhitelistBlacklistTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateBlockFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.120");
+            using var server = new TestServer(WebHostBuilderHelper.CreateBlockFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.120");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -170,18 +180,17 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileIgnoreAllTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/ignorepost");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/ignorepost");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -190,16 +199,15 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileIgnoreBlockPutTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/ignoreget");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/ignoreget");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
         }
 
         /// <summary>
@@ -208,18 +216,127 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task FileIgnoreGetTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/ignoreget");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server = new TestServer(WebHostBuilderHelper.CreateIgnoreFileBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("GET");
+            // Act
+            RequestBuilder request = server.CreateRequest("/ignoreget");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("GET");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The path allow all not found test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathAllowAllNotFoundTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathAllowFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathpost");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
+
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The path allow not on blacklist test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathAllowRealIPNotOnBlacklistTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathAllowFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathget");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
+
+            HttpResponseMessage response = await request.SendAsync("GET");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The path allow on blacklist test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathAllowRealIPOnBlacklistTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathAllowFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathget");
+            request.AddHeader("X-Real-IP", "192.168.0.10");
+
+            HttpResponseMessage response = await request.SendAsync("GET");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
+        }
+
+        /// <summary>
+        /// The path allow on blacklist but whitelisted test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathAllowRealIPOnBlacklistTest2()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathAllowFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathpost");
+            request.AddHeader("X-Real-IP", "192.168.0.101");
+
+            HttpResponseMessage response = await request.SendAsync("POST");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
+        }
+
+        /// <summary>
+        /// The path block all test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathBlockAllNotFoundTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathBlockFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathpost");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
+
+            HttpResponseMessage response = await request.SendAsync("POST");
+
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Unauthorized");
+        }
+
+        /// <summary>
+        /// The path block on whitelist but blacklisted test.
+        /// </summary>
+        [TestMethod]
+        public async Task FilePathBlockRealIPOnWhitelistBlacklistTest()
+        {
+            using var server = new TestServer(WebHostBuilderHelper.CreatePathBlockFileBuilder());
+
+            // Act
+            RequestBuilder request = server.CreateRequest("/pathget");
+            request.AddHeader("X-Real-IP", "192.168.0.120");
+
+            HttpResponseMessage response = await request.SendAsync("GET");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode, "StatusCode != Not Found");
         }
 
         #endregion

@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPFilteringOptions.cs" company="Marcin Smółka zNET Computer Solutions">
+// <copyright file="PathOption.cs" company="Marcin Smółka zNET Computer Solutions">
 //   Copyright (c) Marcin Smółka zNET Computer Solutions. All rights reserved.
 // </copyright>
 // <summary>
-//   The IP filtering options.
+//   The path option.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -17,23 +17,17 @@ namespace ZNetCS.AspNetCore.IPFiltering
     #endregion
 
     /// <summary>
-    /// The IP filtering options.
+    /// The path option.
     /// </summary>
-    public class IPFilteringOptions : OptionBase
+    public class PathOption : OptionBase
     {
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the paths to be ignored from filtering.
+        /// Gets or sets the paths specific for current configuration.
         /// </summary>
         [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
-        public ICollection<string> IgnoredPaths { get; set; } = new List<string>();
-
-        /// <summary>
-        /// Gets or sets the paths specific filtering.
-        /// </summary>
-        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
-        public ICollection<PathOption> PathOptions { get; set; } = new List<PathOption>();
+        public ICollection<string> Paths { get; set; } = new List<string>();
 
         #endregion
     }

@@ -12,6 +12,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
     #region Usings
 
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
 
@@ -29,19 +30,44 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
         #region IIPAddressChecker
 
         /// <inheritdoc/>
-        public virtual bool IsAllowed(IPAddress ipAddress, IPFilteringOptions options)
+        public virtual bool CheckPaths(string verb, string path, ICollection<string> paths)
         {
-            if (options == null)
+            if (paths != null)
             {
-                throw new ArgumentNullException(nameof(options));
+                string fullCheck = $"{verb}:{path}";
+                string check = $"*:{path}";
+
+                if (paths.Any(x => Contains(fullCheck, x)) || paths.Any(x => Contains(check, x)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+            static bool Contains(string source, string value)
+                => (source != null) && (value != null) && source.StartsWith(value, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <inheritdoc/>
+        public virtual bool IsAllowed(IPAddress ipAddress, ICollection<string> optWhitelist, ICollection<string> optBlacklist, DefaultBlockLevel blockLevel)
+        {
+            if (optWhitelist == null)
+            {
+                throw new ArgumentNullException(nameof(optWhitelist));
+            }
+
+            if (optBlacklist == null)
+            {
+                throw new ArgumentNullException(nameof(optBlacklist));
             }
 
             if (ipAddress != null)
             {
-                var whitelist = options.Whitelist.Select(IPAddressRange.Parse).ToList();
-                var blacklist = options.Blacklist.Select(IPAddressRange.Parse).ToList();
+                var whitelist = optWhitelist.Select(IPAddressRange.Parse).ToList();
+                var blacklist = optBlacklist.Select(IPAddressRange.Parse).ToList();
 
-                switch (options.DefaultBlockLevel)
+                switch (blockLevel)
                 {
                     case DefaultBlockLevel.All:
                         return whitelist.Any(r => r.Contains(ipAddress)) && !blacklist.Any(r => r.Contains(ipAddress));
@@ -51,34 +77,7 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
                 }
             }
 
-            return options.DefaultBlockLevel == DefaultBlockLevel.None;
-        }
-
-        /// <inheritdoc/>
-        public bool IsIgnored(string verb, string path, IPFilteringOptions options)
-        {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            if (options.IgnoredPaths != null)
-            {
-                string fullCheck = $"{verb}:{path}";
-                string check = $"*:{path}";
-
-                if (options.IgnoredPaths.Any(x => Contains(fullCheck, x)) || options.IgnoredPaths.Any(x => Contains(check, x)))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-
-            bool Contains(string source, string value)
-            {
-                return (source != null) && (value != null) && source.StartsWith(value, StringComparison.OrdinalIgnoreCase);
-            }
+            return blockLevel == DefaultBlockLevel.None;
         }
 
         #endregion

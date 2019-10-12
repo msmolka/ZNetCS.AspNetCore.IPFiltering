@@ -85,6 +85,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
                     this.options.Blacklist = opts.Blacklist;
                     this.options.Whitelist = opts.Whitelist;
                     this.options.IgnoredPaths = opts.IgnoredPaths;
+                    this.options.PathOptions = opts.PathOptions;
                 });
         }
 
@@ -108,21 +109,56 @@ namespace ZNetCS.AspNetCore.IPFiltering
             var finder = context.RequestServices.GetRequiredService<IIPAddressFinder>();
             var checker = context.RequestServices.GetRequiredService<IIPAddressChecker>();
 
-            var path = context.Request.Path.HasValue ? context.Request.Path.Value : null;
-            var verb = context.Request.Method;
+            string path = context.Request.Path.HasValue ? context.Request.Path.Value : null;
+            string verb = context.Request.Method;
+
+            PathOption foundPath = null;
+
+            if (this.options.PathOptions != null)
+            {
+                this.logger.LogDebug("Checking if path: {path} with method {verb} is on any specific path option.", path, verb);
+
+                foreach (PathOption pathOption in this.options.PathOptions)
+                {
+                    if (checker.CheckPaths(verb, path, pathOption.Paths))
+                    {
+                        foundPath = pathOption;
+                        break;
+                    }
+                }
+            }
 
             IPAddress ipAddress = finder.Find(context);
 
-            this.logger.LogDebug("Checking if path: {path} with method {verb} should be ignored or IP: {ipAddress} address is allowed .", path, verb, ipAddress);
-            if (checker.IsIgnored(verb, path, this.options) || checker.IsAllowed(ipAddress, this.options))
+            if (foundPath != null)
             {
-                this.logger.LogDebug("IP is allowed for further process.");
-                await this.next.Invoke(context);
+                this.logger.LogDebug("Checking if IP: {ipAddress} address is allowed .", ipAddress);
+                if (checker.IsAllowed(ipAddress, foundPath.Whitelist, foundPath.Blacklist, foundPath.DefaultBlockLevel))
+                {
+                    this.logger.LogDebug("IP is allowed for further process.");
+                    await this.next.Invoke(context);
+                }
+                else
+                {
+                    this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
+                    context.Response.StatusCode = (int)foundPath.HttpStatusCode;
+                }
             }
             else
             {
-                this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
-                context.Response.StatusCode = (int)this.options.HttpStatusCode;
+                this.logger.LogDebug("Checking if path: {path} with method {verb} should be ignored or IP: {ipAddress} address is allowed .", path, verb, ipAddress);
+
+                if (checker.CheckPaths(verb, path, this.options.IgnoredPaths)
+                    || checker.IsAllowed(ipAddress, this.options.Whitelist, this.options.Blacklist, this.options.DefaultBlockLevel))
+                {
+                    this.logger.LogDebug("IP is allowed for further process.");
+                    await this.next.Invoke(context);
+                }
+                else
+                {
+                    this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
+                    context.Response.StatusCode = (int)this.options.HttpStatusCode;
+                }
             }
         }
 

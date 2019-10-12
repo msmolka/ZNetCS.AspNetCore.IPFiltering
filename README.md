@@ -20,7 +20,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="2.3.0" />
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="3.0.0" />
 </ItemGroup>
 ```
 
@@ -54,6 +54,7 @@ public void ConfigureServices(IServiceCollection services)
             opts.Blacklist = new List<string> { "192.168.0.100-192.168.1.200" };
             opts.Whitelist = new List<string> { "192.168.0.10-192.168.10.20", "fe80::/10" };
             opts.IgnoredPaths = new List<string> { "get:/ignoreget", "*:/ignore" };
+            opts.PathOptions = new List<PathOptions> { ... };
         });
 }
 ```
@@ -76,7 +77,23 @@ Middleware can be configured in `appsettings.json` file. By adding following sec
         "HttpStatusCode": 404,
         "Whitelist": [ "192.168.0.10-192.168.10.20", "fe80::/10" ],
         "Blacklist": [ "192.168.0.100-192.168.1.200"],
-        "IgnoredPaths": [ "GET:/ignoreget", "*:/ignore" ]
+        "IgnoredPaths": [ "GET:/ignoreget", "*:/ignore" ],
+        "PathOptions": [
+            {
+                "Paths": [ "GET:/pathget", "*:/path" ],
+                "DefaultBlockLevel": "None",
+                "HttpStatusCode": 401,
+                "Whitelist": [ "192.168.0.100-192.168.1.200" ],
+                "Blacklist": [ "192.168.0.10-192.168.10.20", "fe80::/10" ]
+            }, 
+            {
+                "Paths": [ "GET:/path2get", "*:/path2" ],
+                "DefaultBlockLevel": "All",
+                "HttpStatusCode": 401,
+                "Whitelist": [ "192.168.0.10-192.168.10.20", "fe80::/10" ],
+                "Blacklist": [ "192.168.0.100-192.168.1.200" ]
+          }
+        ]
     }
 }
 ```
@@ -88,7 +105,8 @@ This middleware can be configured using following configuration options:
  * `HttpStatusCode` defines status code that is returned to client when IP address is forbidden. Default value is `404` (`Not Found`).
  * `Whitelist` defines list of IP address ranges that are allowed for request.
  * `Blacklist` defines list of IP address ranges that are forbidden for request.
- * `IgnoredPaths` defines list of path with HTTP Verb to be ignored from IP filtering. `*` means all HTTP Verbs for given path will be ignored. Format `{VERB}:{PATH}` (no space after `:`). This configuration is case insensitive.
+ * `IgnoredPaths` defines list of paths with HTTP Verb to be ignored from IP filtering. `*` means all HTTP Verbs for given path will be ignored. Format `{VERB}:{PATH}` (no space after `:`). This configuration is case insensitive.
+ * `PathOptions` defines list of paths with HTTP Verb to be processed with custom rules. `*` means all HTTP Verbs for given path will be ignored. Format `{VERB}:{PATH}` (no space after `:`). This configuration is case insensitive.
 
 ### IP Address Ranges
 `Whitelist` and `Blacklist` can be defined as single IP address or IP address range. For parsing middleware is using extenal 

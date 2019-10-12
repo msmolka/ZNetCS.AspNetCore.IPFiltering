@@ -37,22 +37,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowForwardedForOnWhitelistTest()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Forwarded-For", "192.168.0.10, 192.168.0.9, 192.168.0.8");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Forwarded-For", "192.168.0.10, 192.168.0.9, 192.168.0.8");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -61,17 +59,16 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowNoIPTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { DefaultBlockLevel = DefaultBlockLevel.None })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
+            using var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { DefaultBlockLevel = DefaultBlockLevel.None }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -80,15 +77,14 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPAllTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { DefaultBlockLevel = DefaultBlockLevel.None })))
-            {
-                // Act
-                HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+            using var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { DefaultBlockLevel = DefaultBlockLevel.None }));
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            // Act
+            HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -97,26 +93,24 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPNotOnBlacklist1Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.0/255.255.255.0" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.10.1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.0/255.255.255.0" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.10.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -125,26 +119,24 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPNotOnBlacklist2Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.10-192.168.10.20" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.9");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.10-192.168.10.20" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.9");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -153,26 +145,24 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPNotOnBlacklist3Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "fe80::/10" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "::1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "fe80::/10" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "::1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -181,26 +171,24 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPNotOnBlacklist4Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.1" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.2");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.1" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.2");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -209,22 +197,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPOnWhitelist1Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.0/255.255.255.0" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.34");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.0/255.255.255.0" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.34");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -233,22 +219,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPOnWhitelist2Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.3.45");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.3.45");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -257,22 +241,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPOnWhitelist3Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "fe80::/10" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "fe80::d503:4ee:3882:c586");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "fe80::/10" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "fe80::d503:4ee:3882:c586");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -281,22 +263,20 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeAllowRealIPOnWhitelist4Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.1" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.1" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                response.EnsureSuccessStatusCode();
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "StatusCode != OK");
         }
 
         /// <summary>
@@ -305,14 +285,13 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockAllForbiddenTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { HttpStatusCode = HttpStatusCode.Forbidden })))
-            {
-                // Act
-                HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+            using var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder(new IPFilteringOptions { HttpStatusCode = HttpStatusCode.Forbidden }));
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode, "StatusCode != Forbidden");
-            }
+            // Act
+            HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode, "StatusCode != Forbidden");
         }
 
         /// <summary>
@@ -321,14 +300,13 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockAllNotFoundTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder()))
-            {
-                // Act
-                HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+            using var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder());
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            // Act
+            HttpResponseMessage response = await server.CreateRequest("/").SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -337,21 +315,19 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockForwarderForNotOnWhitelistTest()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Forwarded-For", "192.168.0.9, 192.168.0.10, 192.168.0.11");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Forwarded-For", "192.168.0.9, 192.168.0.10, 192.168.0.11");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -360,16 +336,15 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockNoIPTest()
         {
-            using (var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder()))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
+            using var server = new TestServer(WebHostBuilderHelper.CreateCodeBuilder());
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != NotFound");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != NotFound");
         }
 
         /// <summary>
@@ -378,21 +353,19 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPNotOnWhitelist1Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.0/255.255.255.0" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.10.1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.0/255.255.255.0" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.10.1");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -401,21 +374,19 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPNotOnWhitelist2Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.9");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.10-192.168.10.20" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.9");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -424,21 +395,19 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPNotOnWhitelist3Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "fe80::/10" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "::1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "fe80::/10" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "::1");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -447,21 +416,19 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPNotOnWhitelist4Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.1" } })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.2");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions { Whitelist = new List<string> { "192.168.0.1" } }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.2");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -470,25 +437,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPOnBlacklist1Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.0/255.255.255.0" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.10");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.0/255.255.255.0" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.10");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -497,25 +462,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPOnBlacklist2Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.10-192.168.10.20" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.11");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.10-192.168.10.20" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.11");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -524,25 +487,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPOnBlacklist3Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "fe80::/10" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "fe80::d503:4ee:3882:c586");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "fe80::/10" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "fe80::d503:4ee:3882:c586");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -551,25 +512,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPOnBlacklist4Test()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                DefaultBlockLevel = DefaultBlockLevel.None,
-                                Blacklist = new List<string> { "192.168.0.1" }
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.1");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            DefaultBlockLevel = DefaultBlockLevel.None,
+                            Blacklist = new List<string> { "192.168.0.1" }
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.1");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         /// <summary>
@@ -578,25 +537,23 @@ namespace ZNetCS.AspNetCore.IPFilteringTest
         [TestMethod]
         public async Task CodeBlockRealIPOnWhitelistBlacklistTest()
         {
-            using (
-                var server =
-                    new TestServer(
-                        WebHostBuilderHelper.CreateCodeBuilder(
-                            new IPFilteringOptions
-                            {
-                                Whitelist = new List<string> { "192.168.0.10-192.168.10.20" },
-                                Blacklist = new List<string> { "192.168.0.100-192.168.0.150" },
-                            })))
-            {
-                // Act
-                RequestBuilder request = server.CreateRequest("/");
-                request.AddHeader("X-Real-IP", "192.168.0.120");
+            using var server =
+                new TestServer(
+                    WebHostBuilderHelper.CreateCodeBuilder(
+                        new IPFilteringOptions
+                        {
+                            Whitelist = new List<string> { "192.168.0.10-192.168.10.20" },
+                            Blacklist = new List<string> { "192.168.0.100-192.168.0.150" },
+                        }));
 
-                HttpResponseMessage response = await request.SendAsync("PUT");
+            // Act
+            RequestBuilder request = server.CreateRequest("/");
+            request.AddHeader("X-Real-IP", "192.168.0.120");
 
-                // Assert
-                Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
-            }
+            HttpResponseMessage response = await request.SendAsync("PUT");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "StatusCode != Not Found");
         }
 
         #endregion
