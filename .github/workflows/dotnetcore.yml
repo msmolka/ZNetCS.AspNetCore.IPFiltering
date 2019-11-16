@@ -17,11 +17,12 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.0.100
-          if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
+          if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')
       - name: Checkout
         uses: actions/checkout@v1
+        if: ((matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')) || (matrix.os == 'windows-latest')
       - name: Build with dotnet for .NET CORE
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release ${{ matrix.framework }}
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework ${{ matrix.framework }}
         if: (matrix.framework == 'netstandard2.0' || matrix.framework == 'netcoreapp3.0')
       - name: Build with dotnet for .NET FRAMEWORK
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework ${{ matrix.framework }}
