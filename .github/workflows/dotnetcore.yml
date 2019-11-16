@@ -26,7 +26,7 @@ jobs:
       - name: Build with dotnet for .NET FRAMEWORK
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net461
         if: (matrix.os == 'windows-latest')
-      - name: Test with dotnet for .NET CORE 2
+      #- name: Test with dotnet for .NET CORE 2
         #future investigation
         #run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp2.2        
       - name: Test with dotnet for .NET CORE 3
