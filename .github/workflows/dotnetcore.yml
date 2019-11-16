@@ -27,3 +27,12 @@ jobs:
       - name: Build with dotnet for .NET FRAMEWORK
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework ${{ matrix.framework }}
         if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
+      - name: Test with dotnet for .NET CORE 2
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp2.2
+        if: (matrix.framework == 'netstandard2.0')
+      - name: Test with dotnet for .NET CORE 3
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework ${{ matrix.framework }}
+        if: (matrix.framework == 'netcoreapp3.0')
+      - name: Test with dotnet for .NET FRAMEWORK
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework ${{ matrix.framework }}
+        if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
