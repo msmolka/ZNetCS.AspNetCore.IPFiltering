@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.0.100
-          if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')
+        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')
       - name: Checkout
         uses: actions/checkout@v1
         if: ((matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')) || (matrix.os == 'windows-latest')
