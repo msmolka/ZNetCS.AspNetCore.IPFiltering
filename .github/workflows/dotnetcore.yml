@@ -10,29 +10,27 @@ jobs:
     strategy:
       matrix:
         os: [macOS-latest, ubuntu-latest, windows-latest]
-        framework: [net461, netstandard2.0, netcoreapp3.0]
-  
+
     steps:
       - name: Setup .NET Core if needed
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.0.100
-        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')
+        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
       - name: Checkout
         uses: actions/checkout@v1
-        if: ((matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest') && (matrix.framework != 'net461')) || (matrix.os == 'windows-latest')
-      - name: Build with dotnet for .NET CORE
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework ${{ matrix.framework }}
-        if: (matrix.framework == 'netstandard2.0' || matrix.framework == 'netcoreapp3.0')
+      - name: Build with dotnet for .NET CORE 2
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netstandard2.0
+      - name: Build with dotnet for .NET CORE 3
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.0
       - name: Build with dotnet for .NET FRAMEWORK
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework ${{ matrix.framework }}
-        if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net461
+        if: (matrix.os == 'windows-latest')
       - name: Test with dotnet for .NET CORE 2
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp2.2
-        if: (matrix.framework == 'netstandard2.0')
+        #future investigation
+        #run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp2.2        
       - name: Test with dotnet for .NET CORE 3
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework ${{ matrix.framework }}
-        if: (matrix.framework == 'netcoreapp3.0')
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.0
       - name: Test with dotnet for .NET FRAMEWORK
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework ${{ matrix.framework }}
-        if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net461
+        if: (matrix.os == 'windows-latest')
