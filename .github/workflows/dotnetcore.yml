@@ -21,8 +21,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Build with dotnet for .NET CORE
-        run: dotnet build .ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
+        run: dotnet build ./ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
         if: (matrix.framework == 'netstandard2.0' || matrix.framework == 'netcoreapp3.0')
       - name: Build with dotnet for .NET FRAMEWORK
-        run: dotnet build .ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
+        run: dotnet build ./ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
         if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
