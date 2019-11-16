@@ -5,13 +5,24 @@ on: [push]
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     
+    strategy:
+      matrix:
+        os: [macOS-latest, ubuntu-latest, windows-latest]
+        framework: [net461, netstandard2.0, netcoreapp3.0]
+  
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.0.100
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+      - name: Setup .NET Core if needed
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.0.100
+          if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build with dotnet for .NET CORE
+        run: dotnet build .ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
+        if: (matrix.framework == 'netstandard2.0' || matrix.framework == 'netcoreapp3.0')
+      - name: Build with dotnet for .NET FRAMEWORK
+        run: dotnet build .ZNetCS.AspNetCore.IPFiltering.sln --configuration Release --framework ${{ matrix.framework }}
+        if: (matrix.framework == 'net461' && matrix.os == 'windows-latest')
