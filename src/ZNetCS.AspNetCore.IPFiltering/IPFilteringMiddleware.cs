@@ -133,7 +133,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
             if (foundPath != null)
             {
                 this.logger.LogDebug("Checking if IP: {ipAddress} address is allowed .", ipAddress);
-                if (checker.IsAllowed(ipAddress, foundPath.Whitelist, foundPath.Blacklist, foundPath.DefaultBlockLevel))
+                if (checker.IsAllowed(ipAddress, foundPath.ParsedWhitelist, foundPath.ParsedBlacklist, foundPath.DefaultBlockLevel))
                 {
                     this.logger.LogDebug("IP is allowed for further process.");
                     await this.next.Invoke(context);
@@ -149,7 +149,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
                 this.logger.LogDebug("Checking if path: {path} with method {verb} should be ignored or IP: {ipAddress} address is allowed .", path, verb, ipAddress);
 
                 if (checker.CheckPaths(verb, path, this.options.IgnoredPaths)
-                    || checker.IsAllowed(ipAddress, this.options.Whitelist, this.options.Blacklist, this.options.DefaultBlockLevel))
+                    || checker.IsAllowed(ipAddress, this.options.ParsedWhitelist, this.options.ParsedBlacklist, this.options.DefaultBlockLevel))
                 {
                     this.logger.LogDebug("IP is allowed for further process.");
                     await this.next.Invoke(context);

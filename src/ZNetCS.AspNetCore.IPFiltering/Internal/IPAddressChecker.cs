@@ -49,24 +49,21 @@ namespace ZNetCS.AspNetCore.IPFiltering.Internal
                 => (source != null) && (value != null) && source.StartsWith(value, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        /// <inheritdoc/>
-        public virtual bool IsAllowed(IPAddress ipAddress, ICollection<string> optWhitelist, ICollection<string> optBlacklist, DefaultBlockLevel blockLevel)
+        /// <inheritdoc />
+        public bool IsAllowed(IPAddress ipAddress, ICollection<IPAddressRange> whitelist, ICollection<IPAddressRange> blacklist, DefaultBlockLevel blockLevel)
         {
-            if (optWhitelist == null)
+            if (whitelist == null)
             {
-                throw new ArgumentNullException(nameof(optWhitelist));
+                throw new ArgumentNullException(nameof(whitelist));
             }
 
-            if (optBlacklist == null)
+            if (blacklist == null)
             {
-                throw new ArgumentNullException(nameof(optBlacklist));
+                throw new ArgumentNullException(nameof(blacklist));
             }
 
             if (ipAddress != null)
             {
-                var whitelist = optWhitelist.Select(IPAddressRange.Parse).ToList();
-                var blacklist = optBlacklist.Select(IPAddressRange.Parse).ToList();
-
                 switch (blockLevel)
                 {
                     case DefaultBlockLevel.All:

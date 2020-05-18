@@ -20,7 +20,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="3.0.0" />
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="4.0.0" />
 </ItemGroup>
 ```
 

@@ -11,8 +11,11 @@ namespace ZNetCS.AspNetCore.IPFiltering
 {
     #region Usings
 
+    using System;
     using System.Collections.Generic;
     using System.Net;
+
+    using NetTools;
 
     #endregion
 
@@ -46,11 +49,11 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <param name="ipAddress">
         /// The IP address.
         /// </param>
-        /// <param name="optWhitelist">
-        /// The option whitelist.
+        /// <param name="whitelist">
+        /// The whitelist.
         /// </param>
-        /// <param name="optBlacklist">
-        /// The option blacklist.
+        /// <param name="blacklist">
+        /// The blacklist.
         /// </param>
         /// <param name="blockLevel">
         /// The default block level.
@@ -58,7 +61,7 @@ namespace ZNetCS.AspNetCore.IPFiltering
         /// <returns>
         /// Returns <see langword="true"/> if IP address is allowed, otherwise <see langword="false"/>.
         /// </returns>
-        bool IsAllowed(IPAddress ipAddress, ICollection<string> optWhitelist, ICollection<string> optBlacklist, DefaultBlockLevel blockLevel);
+        bool IsAllowed(IPAddress ipAddress, ICollection<IPAddressRange> whitelist, ICollection<IPAddressRange> blacklist, DefaultBlockLevel blockLevel);
 
         #endregion
     }
