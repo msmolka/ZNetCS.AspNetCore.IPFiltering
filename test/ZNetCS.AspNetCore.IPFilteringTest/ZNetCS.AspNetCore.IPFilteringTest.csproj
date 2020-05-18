@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Authors>Marcin Smółka</Authors>
-    <TargetFrameworks>net461;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>ZNetCS.AspNetCore.IPFilteringTest</AssemblyName>
     <PackageId>ZNetCS.AspNetCore.IPFilteringTest</PackageId>
