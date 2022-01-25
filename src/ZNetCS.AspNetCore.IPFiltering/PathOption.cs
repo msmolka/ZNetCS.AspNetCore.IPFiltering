@@ -7,28 +7,27 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering
+namespace ZNetCS.AspNetCore.IPFiltering;
+
+#region Usings
+
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+#endregion
+
+/// <summary>
+/// The path option.
+/// </summary>
+public class PathOption : OptionBase
 {
-    #region Usings
-
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-
-    #endregion
+    #region Public Properties
 
     /// <summary>
-    /// The path option.
+    /// Gets or sets the paths specific for current configuration.
     /// </summary>
-    public class PathOption : OptionBase
-    {
-        #region Public Properties
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
+    public ICollection<string>? Paths { get; set; } = new HashSet<string>();
 
-        /// <summary>
-        /// Gets or sets the paths specific for current configuration.
-        /// </summary>
-        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
-        public ICollection<string> Paths { get; set; } = new List<string>();
-
-        #endregion
-    }
+    #endregion
 }

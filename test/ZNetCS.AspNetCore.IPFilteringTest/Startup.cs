@@ -1,44 +1,19 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="StartupBlock.cs" company="Marcin Smółka zNET Computer Solutions">
+// <copyright file="Startup.cs" company="Marcin Smółka zNET Computer Solutions">
 //   Copyright (c) Marcin Smółka zNET Computer Solutions. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace ZNetCS.AspNetCore.IPFilteringTest;
 
-#region Usings
-
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-#endregion
 
 /// <summary>
 /// The startup class.
 /// </summary>
-public class StartupBlock
+public class Startup
 {
-    #region Fields
-
-    private readonly IConfiguration configuration;
-
-    #endregion
-
-    #region Constructors and Destructors
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="StartupBlock"/> class.
-    /// </summary>
-    /// <param name="configuration">
-    /// The configuration interface.
-    /// </param>
-    public StartupBlock(IConfiguration configuration)
-        => this.configuration = configuration;
-
-    #endregion
-
     #region Public Methods
 
     /// <summary>
@@ -49,8 +24,6 @@ public class StartupBlock
     /// </param>
     public void Configure(IApplicationBuilder app)
     {
-        app.UseIPFiltering();
-        app.Run(async context => { await context.Response.WriteAsync("Hello World"); });
     }
 
     /// <summary>
@@ -61,7 +34,6 @@ public class StartupBlock
     /// </param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddIPFiltering(this.configuration.GetSection("IPFiltering"));
     }
 
     #endregion

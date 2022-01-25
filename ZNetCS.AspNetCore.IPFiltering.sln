@@ -16,6 +16,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZNetCS.AspNetCore.IPFilteri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZNetCS.AspNetCore.IPFilteringTest", "test\ZNetCS.AspNetCore.IPFilteringTest\ZNetCS.AspNetCore.IPFilteringTest.csproj", "{2E64647D-F73D-4CF6-BBA4-0FD02F49CE76}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{229A9AC9-B768-4CAC-BAE7-ADFE25F5BF61}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{295C9C92-5C6A-42F2-8D27-5D730FF9E434}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		Settings.StyleCop = Settings.StyleCop
+		stylecop.json = stylecop.json
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

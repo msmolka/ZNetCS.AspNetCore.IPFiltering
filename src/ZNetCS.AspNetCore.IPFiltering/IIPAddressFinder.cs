@@ -7,31 +7,30 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering
+namespace ZNetCS.AspNetCore.IPFiltering;
+
+#region Usings
+
+using System.Net;
+
+using Microsoft.AspNetCore.Http;
+
+#endregion
+
+/// <summary>
+/// The IPAddressFinder interface.
+/// </summary>
+public interface IIPAddressFinder
 {
-    #region Usings
-
-    using System.Net;
-
-    using Microsoft.AspNetCore.Http;
-
-    #endregion
+    #region Public Methods
 
     /// <summary>
-    /// The IPAddressFinder interface.
+    /// Finds IP address in HTTP context.
     /// </summary>
-    public interface IIPAddressFinder
-    {
-        #region Public Methods
+    /// <param name="context">
+    /// The HTTP context.
+    /// </param>
+    IPAddress? Find(HttpContext context);
 
-        /// <summary>
-        /// Finds IP address in HTTP context.
-        /// </summary>
-        /// <param name="context">
-        /// The HTTP context.
-        /// </param>
-        IPAddress Find(HttpContext context);
-
-        #endregion
-    }
+    #endregion
 }

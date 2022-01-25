@@ -7,106 +7,107 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering.Internal
+namespace ZNetCS.AspNetCore.IPFiltering.Internal;
+
+#region Usings
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+
+#endregion
+
+/// <summary>
+/// The IP address finder.
+/// </summary>
+[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Public API")]
+public class IPAddressFinder : IIPAddressFinder
 {
-    #region Usings
+    #region Constants
 
-    using System;
-    using System.Net;
+    /// <summary>
+    /// The X-Forwarded-For header.
+    /// </summary>
+    private const string ForwardedFor = "X-Forwarded-For";
 
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Logging;
+    /// <summary>
+    /// The X-Real-IP header.
+    /// </summary>
+    private const string RealIP = "X-Real-IP";
 
     #endregion
 
+    #region Fields
+
     /// <summary>
-    /// The IP address finder.
+    /// The logger.
     /// </summary>
-    public class IPAddressFinder : IIPAddressFinder
+    private readonly ILogger logger;
+
+    #endregion
+
+    #region Constructors and Destructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IPAddressFinder"/> class.
+    /// </summary>
+    /// <param name="loggerFactory">
+    /// The logger factory.
+    /// </param>
+    public IPAddressFinder(ILoggerFactory loggerFactory) => this.logger = loggerFactory.CreateLogger<IPAddressFinder>();
+
+    #endregion
+
+    #region Implemented Interfaces
+
+    #region IIPAddressFinder
+
+    /// <inheritdoc/>
+    public virtual IPAddress? Find(HttpContext context)
     {
-        #region Constants
-
-        /// <summary>
-        /// The X-Forwarded-For header.
-        /// </summary>
-        private const string ForwardedFor = "X-Forwarded-For";
-
-        /// <summary>
-        /// The X-Real-IP header.
-        /// </summary>
-        private const string RealIP = "X-Real-IP";
-
-        #endregion
-
-        #region Fields
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private readonly ILogger logger;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IPAddressFinder"/> class.
-        /// </summary>
-        /// <param name="loggerFactory">
-        /// The logger factory.
-        /// </param>
-        public IPAddressFinder(ILoggerFactory loggerFactory) => this.logger = loggerFactory.CreateLogger<IPAddressFinder>();
-
-        #endregion
-
-        #region Implemented Interfaces
-
-        #region IIPAddressFinder
-
-        /// <inheritdoc/>
-        public virtual IPAddress Find(HttpContext context)
+        if (context == null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            throw new ArgumentNullException(nameof(context));
+        }
 
-            string realIpHeader = context.Request.Headers[RealIP];
-            IPAddress ipAddress = null;
-            if (!string.IsNullOrWhiteSpace(realIpHeader))
-            {
-                ipAddress = IPAddressParser.Parse(realIpHeader);
-            }
+        string realIpHeader = context.Request.Headers[RealIP];
+        IPAddress? ipAddress = null;
+        if (!string.IsNullOrWhiteSpace(realIpHeader))
+        {
+            ipAddress = IPAddressParser.Parse(realIpHeader);
+        }
 
-            if (ipAddress != null)
-            {
-                this.logger.LogDebug("Found IP: {ip} in {header}.", ipAddress, RealIP);
-                return ipAddress;
-            }
-
-            var forwardedForHeader = context.Request.Headers.GetCommaSeparatedValues(ForwardedFor);
-
-            if ((forwardedForHeader != null) && (forwardedForHeader.Length > 0))
-            {
-                // first address in X-Forwarded-For header is original one.
-                // X-Forwarded-For: client, proxy1, proxy2
-                ipAddress = IPAddressParser.Parse(forwardedForHeader[0]);
-
-                if (ipAddress != null)
-                {
-                    this.logger.LogDebug("Found IP: {ip} in {header}.", ipAddress, ForwardedFor);
-                    return ipAddress;
-                }
-            }
-
-            ipAddress = context.Connection.RemoteIpAddress;
-
-            this.logger.LogDebug("Found IP: {ip}.", ipAddress);
+        if (ipAddress != null)
+        {
+            this.logger.LogDebug("Found IP: {IPAddress} in {Header}", ipAddress, RealIP);
             return ipAddress;
         }
 
-        #endregion
+        string[]? forwardedForHeader = context.Request.Headers.GetCommaSeparatedValues(ForwardedFor);
 
-        #endregion
+        if (forwardedForHeader is { Length: > 0 })
+        {
+            // first address in X-Forwarded-For header is original one.
+            // X-Forwarded-For: client, proxy1, proxy2
+            ipAddress = IPAddressParser.Parse(forwardedForHeader[0]);
+
+            if (ipAddress != null)
+            {
+                this.logger.LogDebug("Found IP: {IPAddress} in {Header}", ipAddress, ForwardedFor);
+                return ipAddress;
+            }
+        }
+
+        ipAddress = context.Connection.RemoteIpAddress;
+
+        this.logger.LogDebug("Found IP: {IPAddress}", ipAddress);
+        return ipAddress;
     }
+
+    #endregion
+
+    #endregion
 }

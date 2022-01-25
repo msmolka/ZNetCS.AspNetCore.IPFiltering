@@ -7,194 +7,196 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering
+namespace ZNetCS.AspNetCore.IPFiltering;
+
+#region Usings
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+#endregion
+
+/// <summary>
+/// The IP filtering middleware.
+/// </summary>
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Public API")]
+public sealed class IPFilteringMiddleware : IDisposable
 {
-    #region Usings
+    #region Fields
 
-    using System;
-    using System.Net;
-    using System.Threading.Tasks;
+    /// <summary>
+    /// The logger.
+    /// </summary>
+    private readonly ILogger logger;
 
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
+    /// <summary>
+    /// The next request delegate.
+    /// </summary>
+    private readonly RequestDelegate next;
+
+    /// <summary>
+    /// The options.
+    /// </summary>
+    private readonly IPFilteringOptions options;
+
+    /// <summary>
+    /// The options disposable.
+    /// </summary>
+    private readonly IDisposable optionsDisposable;
 
     #endregion
 
+    #region Constructors and Destructors
+
     /// <summary>
-    /// The IP filtering middleware.
+    /// Initializes a new instance of the <see cref="IPFilteringMiddleware"/> class.
     /// </summary>
-    public class IPFilteringMiddleware : IDisposable
+    /// <param name="next">
+    /// The <see cref="RequestDelegate"/> representing the next middleware in the pipeline.
+    /// </param>
+    /// <param name="loggerFactory">
+    /// The logger factory.
+    /// </param>
+    /// <param name="options">
+    /// The <see cref="IPFilteringOptions"/> representing the options for the <see cref="IPFilteringMiddleware"/>.
+    /// </param>
+    public IPFilteringMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IOptionsMonitor<IPFilteringOptions> options)
     {
-        #region Fields
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private readonly ILogger logger;
-
-        /// <summary>
-        /// The next request delegate.
-        /// </summary>
-        private readonly RequestDelegate next;
-
-        /// <summary>
-        /// The options.
-        /// </summary>
-        private readonly IPFilteringOptions options;
-
-        /// <summary>
-        /// The options disposable.
-        /// </summary>
-        private readonly IDisposable optionsDisposable;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IPFilteringMiddleware"/> class.
-        /// </summary>
-        /// <param name="next">
-        /// The <see cref="RequestDelegate"/> representing the next middleware in the pipeline.
-        /// </param>
-        /// <param name="loggerFactory">
-        /// The logger factory.
-        /// </param>
-        /// <param name="options">
-        /// The <see cref="IPFilteringOptions"/> representing the options for the <see cref="IPFilteringMiddleware"/>.
-        /// </param>
-        public IPFilteringMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IOptionsMonitor<IPFilteringOptions> options)
+        if (options == null)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            this.next = next;
-            this.logger = loggerFactory.CreateLogger<IPFilteringMiddleware>();
-
-            this.options = options.CurrentValue;
-
-            this.optionsDisposable = options.OnChange(
-                opts =>
-                {
-                    this.options.DefaultBlockLevel = opts.DefaultBlockLevel;
-                    this.options.HttpStatusCode = opts.HttpStatusCode;
-                    this.options.Blacklist = opts.Blacklist;
-                    this.options.Whitelist = opts.Whitelist;
-                    this.options.IgnoredPaths = opts.IgnoredPaths;
-                    this.options.PathOptions = opts.PathOptions;
-                });
+            throw new ArgumentNullException(nameof(options));
         }
 
-        #endregion
+        this.next = next;
+        this.logger = loggerFactory.CreateLogger<IPFilteringMiddleware>();
 
-        #region Public Methods
+        this.options = options.CurrentValue;
+        this.optionsDisposable = options.OnChange(
+            opts =>
+            {
+                this.options.DefaultBlockLevel = opts.DefaultBlockLevel;
+                this.options.HttpStatusCode = opts.HttpStatusCode;
+                this.options.Blacklist = opts.Blacklist;
+                this.options.Whitelist = opts.Whitelist;
+                this.options.IgnoredPaths = opts.IgnoredPaths;
+                this.options.PathOptions = opts.PathOptions;
+            });
+    }
 
-        /// <summary>
-        /// Invokes middleware.
-        /// </summary>
-        /// <param name="context">
-        /// The <see cref="HttpContext"/> context.
-        /// </param>
-        public async Task Invoke(HttpContext context)
+    #endregion
+
+    #region Public Methods
+
+    /// <summary>
+    /// Invokes middleware.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="HttpContext"/> context.
+    /// </param>
+    public async Task Invoke(HttpContext context)
+    {
+        if (context == null)
         {
-            if (context == null)
+            throw new ArgumentNullException(nameof(context));
+        }
+
+        var ipAddressFinder = context.RequestServices.GetRequiredService<IIPAddressFinder>();
+        var ipAddressChecker = context.RequestServices.GetRequiredService<IIPAddressChecker>();
+        var pathChecker = context.RequestServices.GetRequiredService<IPathChecker>();
+
+        string? path = context.Request.Path.HasValue ? context.Request.Path.Value : null;
+        string verb = context.Request.Method;
+
+        PathOption? foundPath = null;
+
+        if (this.options.PathOptions != null)
+        {
+            this.logger.LogDebug("Checking if path: {Path} with method {Verb} is on any specific path option", path, verb);
+
+            foreach (PathOption pathOption in this.options.PathOptions)
             {
-                throw new ArgumentNullException(nameof(context));
+                if (!pathChecker.CheckPaths(verb, path, pathOption.Paths))
+                {
+                    continue;
+                }
+
+                foundPath = pathOption;
+                break;
             }
+        }
 
-            var finder = context.RequestServices.GetRequiredService<IIPAddressFinder>();
-            var checker = context.RequestServices.GetRequiredService<IIPAddressChecker>();
+        IPAddress? ipAddress = ipAddressFinder.Find(context);
 
-            string path = context.Request.Path.HasValue ? context.Request.Path.Value : null;
-            string verb = context.Request.Method;
-
-            PathOption foundPath = null;
-
-            if (this.options.PathOptions != null)
+        if (foundPath != null)
+        {
+            this.logger.LogDebug("Checking if IP: {IPAddress} address is allowed", ipAddress);
+            if (ipAddressChecker.IsAllowed(ipAddress, foundPath.ParsedWhitelist, foundPath.ParsedBlacklist, foundPath.DefaultBlockLevel))
             {
-                this.logger.LogDebug("Checking if path: {path} with method {verb} is on any specific path option.", path, verb);
-
-                foreach (PathOption pathOption in this.options.PathOptions)
-                {
-                    if (checker.CheckPaths(verb, path, pathOption.Paths))
-                    {
-                        foundPath = pathOption;
-                        break;
-                    }
-                }
-            }
-
-            IPAddress ipAddress = finder.Find(context);
-
-            if (foundPath != null)
-            {
-                this.logger.LogDebug("Checking if IP: {ipAddress} address is allowed .", ipAddress);
-                if (checker.IsAllowed(ipAddress, foundPath.ParsedWhitelist, foundPath.ParsedBlacklist, foundPath.DefaultBlockLevel))
-                {
-                    this.logger.LogDebug("IP is allowed for further process.");
-                    await this.next.Invoke(context);
-                }
-                else
-                {
-                    this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
-                    context.Response.StatusCode = (int)foundPath.HttpStatusCode;
-                }
+                this.logger.LogDebug("IP is allowed for further process");
+                await this.next.Invoke(context);
             }
             else
             {
-                this.logger.LogDebug("Checking if path: {path} with method {verb} should be ignored or IP: {ipAddress} address is allowed .", path, verb, ipAddress);
-
-                if (checker.CheckPaths(verb, path, this.options.IgnoredPaths)
-                    || checker.IsAllowed(ipAddress, this.options.ParsedWhitelist, this.options.ParsedBlacklist, this.options.DefaultBlockLevel))
-                {
-                    this.logger.LogDebug("IP is allowed for further process.");
-                    await this.next.Invoke(context);
-                }
-                else
-                {
-                    this.logger.LogInformation(1, "The IP Address: {ipAddress} was blocked.", ipAddress);
-                    context.Response.StatusCode = (int)this.options.HttpStatusCode;
-                }
+                this.logger.LogInformation(1, "The IP Address: {IPAddress} was blocked", ipAddress);
+                context.Response.StatusCode = (int)foundPath.HttpStatusCode;
             }
         }
-
-        #endregion
-
-        #region Implemented Interfaces
-
-        #region IDisposable
-
-        /// <inheritdoc/>
-        public void Dispose()
+        else
         {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            this.logger.LogDebug("Checking if path: {Path} with method {Verb} should be ignored or IP: {IPAddress} address is allowed", path, verb, ipAddress);
 
-        #endregion
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">
-        /// True if managed resources should be disposed; otherwise, false.
-        /// </param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (pathChecker.CheckPaths(verb, path, this.options.IgnoredPaths)
+                || ipAddressChecker.IsAllowed(ipAddress, this.options.ParsedWhitelist, this.options.ParsedBlacklist, this.options.DefaultBlockLevel))
             {
-                this.optionsDisposable?.Dispose();
+                this.logger.LogDebug("IP is allowed for further process");
+                await this.next.Invoke(context);
+            }
+            else
+            {
+                this.logger.LogInformation(1, "The IP Address: {IPAddress} was blocked", ipAddress);
+                context.Response.StatusCode = (int)this.options.HttpStatusCode;
             }
         }
-
-        #endregion
     }
+
+    #endregion
+
+    #region Implemented Interfaces
+
+    #region IDisposable
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        this.Dispose(true);
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">
+    /// True if managed resources should be disposed; otherwise, false.
+    /// </param>
+    private void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            this.optionsDisposable.Dispose();
+        }
+    }
+
+    #endregion
 }

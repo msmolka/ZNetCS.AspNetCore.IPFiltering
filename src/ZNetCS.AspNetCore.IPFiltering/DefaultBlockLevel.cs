@@ -7,21 +7,20 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ZNetCS.AspNetCore.IPFiltering
+namespace ZNetCS.AspNetCore.IPFiltering;
+
+/// <summary>
+/// The default block level.
+/// </summary>
+public enum DefaultBlockLevel
 {
     /// <summary>
-    /// The default block level.
+    /// None of request will be blocked if not blacklisted.
     /// </summary>
-    public enum DefaultBlockLevel
-    {
-        /// <summary>
-        /// None of request will be blocked if not blacklisted.
-        /// </summary>
-        None = 0,
+    None = 0,
 
-        /// <summary>
-        /// All requests will be blocked if not whitelisted.
-        /// </summary>
-        All = 1
-    }
+    /// <summary>
+    /// All requests will be blocked if not whitelisted.
+    /// </summary>
+    All = 1
 }

@@ -9,16 +9,8 @@
 
 #region Usings
 
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 #endregion
 
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Marcin Smółka zNET Computer Solutions")]
-[assembly: AssemblyTitle("ZNetCS.AspNetCore.IPFiltering")]
-[assembly: AssemblyProduct("ZNetCS.AspNetCore.IPFiltering")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCopyright("Copyright © Marcin Smółka zNET Computer Solutions 2017")]
-[assembly: ComVisible(false)]
 [assembly: Guid("da38722d-9ffc-4abd-a635-100ffce32b35")]

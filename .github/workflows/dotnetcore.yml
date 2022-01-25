@@ -15,22 +15,18 @@ jobs:
       - name: Setup .NET Core if needed
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.0.100
-        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
+          dotnet-version: 6.0.x
       - name: Checkout
-        uses: actions/checkout@v1
-      - name: Build with dotnet for .NET CORE 2
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netstandard2.0
-      - name: Build with dotnet for .NET CORE 3
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.0
-      - name: Build with dotnet for .NET FRAMEWORK
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net461
-        if: (matrix.os == 'windows-latest')
-      #- name: Test with dotnet for .NET CORE 2
-        #future investigation
-        #run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp2.2        
-      - name: Test with dotnet for .NET CORE 3
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.0
-      - name: Test with dotnet for .NET FRAMEWORK
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net461
-        if: (matrix.os == 'windows-latest')
+        uses: actions/checkout@v2
+      - name: Build with dotnet for .NET CORE 3.1
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.1
+      - name: Build with dotnet for .NET 5.0
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net5.0
+      - name: Build with dotnet for .NET 6.0
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net6.0
+      - name: Test with dotnet for .NET CORE 3.1
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.1
+      - name: Test with dotnet for .NET 5.0
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net5.0
+      - name: Test with dotnet for .NET 6.0
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net6.0
