@@ -10,23 +10,16 @@ jobs:
     strategy:
       matrix:
         os: [macOS-latest, ubuntu-latest, windows-latest]
-
+        dotnet: [ '3.1.x', '5.0.x', '6.0.x' ]
+        
     steps:
-      - name: Setup .NET Core if needed
+      - name: Setup .NET Core if needed ${{ matrix.dotnet }}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: ${{ matrix.dotnet }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build with dotnet for .NET CORE 3.1
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.1
-      - name: Build with dotnet for .NET 5.0
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net5.0
-      - name: Build with dotnet for .NET 6.0
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net6.0
-      - name: Test with dotnet for .NET CORE 3.1
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.1
-      - name: Test with dotnet for .NET 5.0
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net5.0
-      - name: Test with dotnet for .NET 6.0
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net6.0
+      - name: Build
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release
+      - name: Test
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj
