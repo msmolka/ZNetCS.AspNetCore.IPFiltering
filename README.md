@@ -21,22 +21,44 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="4.0.0" />
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="6.0.0" />
 </ItemGroup>
 ```
 
+# .NET 6
+
+```c#
+// Add services to the container.
+builder.Services.AddIPFiltering(builder.Configuration.GetSection("IPFiltering"));
+```
+or
+```c#
+// Add services to the container.
+builder.Services.AddIPFiltering(
+        opts =>
+        {
+            opts.DefaultBlockLevel = DefaultBlockLevel.All;
+            opts.HttpStatusCode = HttpStatusCode.NotFound;
+            opts.Blacklist = new List<string> { "192.168.0.100-192.168.1.200" };
+            opts.Whitelist = new List<string> { "192.168.0.10-192.168.10.20", "fe80::/10" };
+            opts.IgnoredPaths = new List<string> { "get:/ignoreget", "*:/ignore" };
+            opts.PathOptions = new List<PathOptions> { ... };
+        });
+```
+
+then
+```c#
+// Configure IP filtering
+app.UseIPFiltering();
+```
+
+# .NET 5 and Below
+
 In order to use the IP filtering middleware, you must configure the services in the `ConfigureServices` and `Configure` call of `Startup`. Make
-sure middleware is added just after loging to prevent any other middleware to run, so block is most effective: 
+sure middleware is added just after logging to prevent any other middleware to run, so block is most effective: 
 
-```csharp
-using ZNetCS.AspNetCore.IPFiltering.DependencyInjection;
-```
 
-```
-...
-```
-
-```csharp
+```c#
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddIPFiltering(this.Configuration.GetSection("IPFiltering"));
@@ -44,7 +66,7 @@ public void ConfigureServices(IServiceCollection services)
 ```
 or
 
-```csharp
+```c#
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddIPFiltering(
@@ -59,7 +81,7 @@ public void ConfigureServices(IServiceCollection services)
         });
 }
 ```
-```csharp
+```c#
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 {   
     app.UseIPFiltering();
