@@ -25,7 +25,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 </ItemGroup>
 ```
 
-# .NET 6
+### .NET 6
 
 ```c#
 // Add services to the container.
@@ -52,7 +52,7 @@ then
 app.UseIPFiltering();
 ```
 
-# .NET 5 and Below
+### .NET 5 and Below
 
 In order to use the IP filtering middleware, you must configure the services in the `ConfigureServices` and `Configure` call of `Startup`. Make
 sure middleware is added just after logging to prevent any other middleware to run, so block is most effective: 
