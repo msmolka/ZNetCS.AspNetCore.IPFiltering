@@ -41,8 +41,8 @@
         </Rule>		
       </Rules>
       <AnalyzerSettings>
-        <StringProperty Name="CompanyName">Marcin Smółka zNET Computer Solutions</StringProperty>
-        <StringProperty Name="Copyright">Copyright (c) Marcin Smółka zNET Computer Solutions. All rights reserved.</StringProperty>
+        <StringProperty Name="CompanyName">Marcin Smółka</StringProperty>
+        <StringProperty Name="Copyright">Copyright (c) Marcin Smółka. All rights reserved.</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
     <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">

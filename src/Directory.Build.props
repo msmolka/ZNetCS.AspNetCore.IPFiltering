@@ -1,26 +1,35 @@
 <Project>
   <PropertyGroup>
-    <Copyright>Copyright © Marcin Smółka zNET Computer Solutions 2017 - 2022</Copyright>
-    <Company>Marcin Smółka zNET Computer Solutions</Company>
+    <Version>6.0.1</Version>
+    <PackageReleaseNotes>Breaking Change: Drop support for netstandard and .net framework. Code refactoring. Dependency update. Library is now strong name signed.</PackageReleaseNotes>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <Title>ZNetCS.AspNetCore.IPFiltering</Title>
     <Product>ZNetCS.AspNetCore.IPFiltering</Product>
     <Description>A middleware that allows whitelist or blacklist incomming requests based on IP address. It can be configured using single IP address or ranges. 
       It supports single IP, IP range IPv4 and IPv6. There is also possible to ignore specific paths from IP filtering.</Description>
     <Authors>Marcin Smółka</Authors>
     <Owners>Marcin Smółka</Owners>
+    <Copyright>Copyright © Marcin Smółka 2017 - 2022</Copyright>
+    <Company>Marcin Smółka zNET Computer Solutions</Company>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>6.0.0</Version>
     <PackageId>ZNetCS.AspNetCore.IPFiltering</PackageId>
     <PackageTags>aspnetcore;aspnetcoremvc;middleware;filter;filtering;ip;ipfiltering;ipfilter;ASP.NET;MVC;whitelist;blacklist;netcore</PackageTags>
     <PackageProjectUrl>https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReleaseNotes>Breaking Change: Drop support for netstandard and .net framework. Code refactoring. Dependency update.</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering</RepositoryUrl>
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\StrongNameKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
@@ -30,6 +39,7 @@
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json"/>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
