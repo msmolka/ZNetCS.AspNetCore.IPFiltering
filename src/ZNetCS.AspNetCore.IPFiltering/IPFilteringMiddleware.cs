@@ -21,6 +21,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using ZNetCS.AspNetCore.IPFiltering.Internal;
+
 #endregion
 
 /// <summary>
@@ -118,7 +120,7 @@ public sealed class IPFilteringMiddleware : IDisposable
 
         if (this.options.PathOptions != null)
         {
-            this.logger.LogDebug("Checking if path: {Path} with method {Verb} is on any specific path option", path, verb);
+            this.logger.CheckPath(path, verb);
 
             foreach (PathOption pathOption in this.options.PathOptions)
             {
@@ -136,31 +138,31 @@ public sealed class IPFilteringMiddleware : IDisposable
 
         if (foundPath != null)
         {
-            this.logger.LogDebug("Checking if IP: {IPAddress} address is allowed", ipAddress);
+            this.logger.CheckIPAddress(ipAddress);
             if (ipAddressChecker.IsAllowed(ipAddress, foundPath.ParsedWhitelist, foundPath.ParsedBlacklist, foundPath.DefaultBlockLevel))
             {
-                this.logger.LogDebug("IP is allowed for further process");
+                this.logger.AllowedIPAddress(ipAddress);
                 await this.next.Invoke(context);
             }
             else
             {
-                this.logger.LogInformation(1, "The IP Address: {IPAddress} was blocked", ipAddress);
+                this.logger.BlockedIPAddress(ipAddress);
                 context.Response.StatusCode = (int)foundPath.HttpStatusCode;
             }
         }
         else
         {
-            this.logger.LogDebug("Checking if path: {Path} with method {Verb} should be ignored or IP: {IPAddress} address is allowed", path, verb, ipAddress);
+            this.logger.CheckPath(path, verb, ipAddress);
 
             if (pathChecker.CheckPaths(verb, path, this.options.IgnoredPaths)
                 || ipAddressChecker.IsAllowed(ipAddress, this.options.ParsedWhitelist, this.options.ParsedBlacklist, this.options.DefaultBlockLevel))
             {
-                this.logger.LogDebug("IP is allowed for further process");
+                this.logger.AllowedIPAddress(ipAddress);
                 await this.next.Invoke(context);
             }
             else
             {
-                this.logger.LogInformation(1, "The IP Address: {IPAddress} was blocked", ipAddress);
+                this.logger.BlockedIPAddress(ipAddress);
                 context.Response.StatusCode = (int)this.options.HttpStatusCode;
             }
         }

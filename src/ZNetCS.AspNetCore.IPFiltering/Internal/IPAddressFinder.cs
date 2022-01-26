@@ -82,7 +82,7 @@ public class IPAddressFinder : IIPAddressFinder
 
         if (ipAddress != null)
         {
-            this.logger.LogDebug("Found IP: {IPAddress} in {Header}", ipAddress, RealIP);
+            this.logger.FoundIPAddress(ipAddress, RealIP);
             return ipAddress;
         }
 
@@ -96,14 +96,14 @@ public class IPAddressFinder : IIPAddressFinder
 
             if (ipAddress != null)
             {
-                this.logger.LogDebug("Found IP: {IPAddress} in {Header}", ipAddress, ForwardedFor);
+                this.logger.FoundIPAddress(ipAddress, ForwardedFor);
                 return ipAddress;
             }
         }
 
         ipAddress = context.Connection.RemoteIpAddress;
 
-        this.logger.LogDebug("Found IP: {IPAddress}", ipAddress);
+        this.logger.FoundIPAddress(ipAddress);
         return ipAddress;
     }
 
