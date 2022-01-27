@@ -26,6 +26,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 ```
 
 ### .NET 6
+In order to use the IP filtering middleware, you must configure the services in the `Program.cs` file.
 
 ```c#
 // Add services to the container.
