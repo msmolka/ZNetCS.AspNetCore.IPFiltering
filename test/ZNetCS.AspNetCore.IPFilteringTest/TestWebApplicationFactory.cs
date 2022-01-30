@@ -21,15 +21,12 @@ using Microsoft.Extensions.Hosting;
 internal class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {
     /// <inheritdoc/>
-    protected override IHostBuilder CreateHostBuilder()
-    {
-        return Host.CreateDefaultBuilder()
-            .ConfigureWebHostDefaults(builder => builder.UseStartup<TStartup>());
-    }
+    protected override IHostBuilder CreateHostBuilder() => Host.CreateDefaultBuilder().ConfigureWebHostDefaults(_ => { });
 
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseStartup<TStartup>();
         builder.UseContentRoot(GetPath() ?? string.Empty);
     }
 
