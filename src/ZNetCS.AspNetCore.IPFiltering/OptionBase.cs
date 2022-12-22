@@ -44,7 +44,6 @@ public abstract class OptionBase
     /// <summary>
     /// Gets or sets the blacklist.
     /// </summary>
-    [AllowNull]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
     public ICollection<string>? Blacklist
     {
@@ -79,7 +78,6 @@ public abstract class OptionBase
     /// <summary>
     /// Gets or sets the whitelist.
     /// </summary>
-    [AllowNull]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
     public ICollection<string>? Whitelist
     {

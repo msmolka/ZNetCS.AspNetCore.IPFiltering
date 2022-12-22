@@ -1,6 +1,10 @@
 name: build
 
-on: [push]
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 jobs:
   build:
@@ -9,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [macOS-latest, ubuntu-latest, windows-latest]
     steps:
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v1
