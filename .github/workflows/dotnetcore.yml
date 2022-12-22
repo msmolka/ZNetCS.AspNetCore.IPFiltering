@@ -15,10 +15,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - name: Setup .NET 5.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
       - name: Setup .NET 6.0
         uses: actions/setup-dotnet@v1
         with:
@@ -31,16 +27,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Build with dotnet for .NET CORE 3.1
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.1
-      - name: Build with dotnet for .NET 5.0
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net5.0
       - name: Build with dotnet for .NET 6.0
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net6.0
       - name: Build with dotnet for .NET 7.0
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net7.0
       - name: Test with dotnet for .NET CORE 3.1
         run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.1
-      - name: Test with dotnet for .NET 5.0
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net5.0
       - name: Test with dotnet for .NET 6.0
         run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net6.0
       - name: Test with dotnet for .NET 7.0
