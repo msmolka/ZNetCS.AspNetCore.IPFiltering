@@ -25,15 +25,7 @@ jobs:
           dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build with dotnet for .NET CORE 3.1
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework netcoreapp3.1
-      - name: Build with dotnet for .NET 6.0
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net6.0
-      - name: Build with dotnet for .NET 7.0
-        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release --framework net7.0
-      - name: Test with dotnet for .NET CORE 3.1
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework netcoreapp3.1
-      - name: Test with dotnet for .NET 6.0
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net6.0
-      - name: Test with dotnet for .NET 7.0
-        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --framework net7.0
+      - name: Build
+        run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release
+      - name: Test
+        run: dotnet test ./test/ZNetCS.AspNetCore.IPFilteringTest/ZNetCS.AspNetCore.IPFilteringTest.csproj --configuration Release
