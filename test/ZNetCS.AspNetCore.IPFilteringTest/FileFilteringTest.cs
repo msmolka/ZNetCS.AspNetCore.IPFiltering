@@ -9,7 +9,7 @@
 
 namespace ZNetCS.AspNetCore.IPFilteringTest;
 
-    #region Usings
+#region Usings
 
 using System.Net;
 using System.Net.Http;
