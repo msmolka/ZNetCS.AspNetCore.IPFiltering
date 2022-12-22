@@ -51,7 +51,7 @@ public sealed class IPFilteringMiddleware : IDisposable
     /// <summary>
     /// The options disposable.
     /// </summary>
-    private readonly IDisposable optionsDisposable;
+    private readonly IDisposable? optionsDisposable;
 
     #endregion
 
@@ -196,7 +196,7 @@ public sealed class IPFilteringMiddleware : IDisposable
     {
         if (disposing)
         {
-            this.optionsDisposable.Dispose();
+            this.optionsDisposable?.Dispose();
         }
     }
 

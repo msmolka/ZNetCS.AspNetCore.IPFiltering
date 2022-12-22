@@ -73,7 +73,7 @@ public class IPAddressFinder : IIPAddressFinder
             throw new ArgumentNullException(nameof(context));
         }
 
-        string realIpHeader = context.Request.Headers[RealIP];
+        string? realIpHeader = context.Request.Headers[RealIP];
         IPAddress? ipAddress = null;
         if (!string.IsNullOrWhiteSpace(realIpHeader))
         {
@@ -86,7 +86,7 @@ public class IPAddressFinder : IIPAddressFinder
             return ipAddress;
         }
 
-        string[]? forwardedForHeader = context.Request.Headers.GetCommaSeparatedValues(ForwardedFor);
+        string[] forwardedForHeader = context.Request.Headers.GetCommaSeparatedValues(ForwardedFor);
 
         if (forwardedForHeader is { Length: > 0 })
         {
