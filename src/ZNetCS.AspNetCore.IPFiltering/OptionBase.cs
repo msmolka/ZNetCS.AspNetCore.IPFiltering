@@ -30,12 +30,12 @@ public abstract class OptionBase
     /// <summary>
     /// The blacklist.
     /// </summary>
-    private ICollection<string> blacklist = new HashSet<string>();
+    private ICollection<string>? blacklist;
 
     /// <summary>
     /// The whitelist.
     /// </summary>
-    private ICollection<string> whitelist = new HashSet<string>();
+    private ICollection<string>? whitelist;
 
     #endregion
 
@@ -46,7 +46,7 @@ public abstract class OptionBase
     /// </summary>
     [AllowNull]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
-    public ICollection<string> Blacklist
+    public ICollection<string>? Blacklist
     {
         get => this.blacklist;
         set
@@ -81,7 +81,7 @@ public abstract class OptionBase
     /// </summary>
     [AllowNull]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options serialization.")]
-    public ICollection<string> Whitelist
+    public ICollection<string>? Whitelist
     {
         get => this.whitelist;
         set
