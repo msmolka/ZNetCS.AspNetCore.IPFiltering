@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>7.0.0</Version>
-    <PackageReleaseNotes>Fix issue for .NET 7.0.1 and 7.0.2</PackageReleaseNotes>
+    <Version>9.0.0</Version>
+    <PackageReleaseNotes>Implement .NET 8 and 9</PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <Title>ZNetCS.AspNetCore.IPFiltering</Title>
     <Product>ZNetCS.AspNetCore.IPFiltering</Product>
@@ -24,12 +24,12 @@
     <RepositoryUrl>https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering</RepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\StrongNameKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
