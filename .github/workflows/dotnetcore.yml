@@ -16,27 +16,27 @@ jobs:
         os: [macOS-latest, ubuntu-latest, windows-latest]
     steps:
       - name: Setup .NET Core 3.1
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '3.1.x'
       - name: Setup .NET 6.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
       - name: Setup .NET 7.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '7.0.x'
       - name: Setup .NET 8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Setup .NET 9.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: dotnet build ./src/ZNetCS.AspNetCore.IPFiltering/ZNetCS.AspNetCore.IPFiltering.csproj --configuration Release
       - name: Test
