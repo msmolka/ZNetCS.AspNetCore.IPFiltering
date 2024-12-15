@@ -10,7 +10,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="IPAddressRange" Version="4.2.0" />
+    <PackageReference Include="IPAddressRange" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
