@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [macOS-latest, ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
     steps:
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v4
