@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/ZNetCS.AspNetCore.IPFiltering.svg)](https://www.nuget.org/packages/ZNetCS.AspNetCore.IPFiltering)
 [![Build](https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering/workflows/build/badge.svg)](https://github.com/msmolka/ZNetCS.AspNetCore.IPFiltering/actions)
 
-A middleware that allows whitelist or blacklist incomming requests based on IP address. It can be configured using single IP address or ranges.
+A middleware that allows whitelist or blacklist incoming requests based on IP address. It can be configured using single IP address or ranges.
 It supports single IP, IP range IPv4 and IPv6. There is also possible to ignore specific paths from IP filtering.
 
 ## Installing 
@@ -21,7 +21,7 @@ When you install the package, it should be added to your `.csproj`. Alternativel
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="6.0.1" />
+    <PackageReference Include="ZNetCS.AspNetCore.IPFiltering" Version="9.0.0" />
 </ItemGroup>
 ```
 
